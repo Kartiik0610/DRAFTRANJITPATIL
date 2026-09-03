@@ -1,0 +1,156 @@
+/* =========================================
+   PHOTO GALLERY — GLASS UI
+========================================= */
+
+/* ---------- WRAPPER ---------- */
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 72px 24px 64px;
+}
+
+/* ---------- GLASS BASE ---------- */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ---------- QUOTE ---------- */
+.gallery-quote {
+  text-align: center;
+  padding: 52px 40px;
+  margin-bottom: 48px;
+}
+
+.gallery-quote blockquote {
+  font-family: "Playfair Display", serif;
+  font-size: 1.6rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-primary);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.gallery-quote span {
+  display: block;
+  margin-top: 16px;
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+
+/* ---------- SECTION ---------- */
+.section {
+  padding: 36px 42px;
+}
+
+.section h2 {
+  font-size: 1.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 36px;
+  position: relative;
+}
+
+.section h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -12px;
+  width: 60px;
+  height: 3px;
+  background: var(--accent-color);
+  border-radius: 3px;
+}
+
+/* ---------- GALLERY GRID ---------- */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+/* ---------- GALLERY ITEM ---------- */
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  height: 260px;
+}
+
+.gallery-item.tall {
+  height: 380px;
+}
+
+.gallery-item.wide {
+  grid-column: span 2;
+  height: 260px;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+/* ---------- CAPTION ---------- */
+.gallery-item figcaption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 16px 18px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.55),
+    rgba(0, 0, 0, 0)
+  );
+  color: #fff;
+}
+
+.gallery-item h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.gallery-item p {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+/* ---------- HOVER ---------- */
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+/* ---------- THEME VARIABLES ---------- */
+:root {
+  --text-primary: #e5e7eb;
+  --accent-color: #c9a227;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+html[data-theme="light"] {
+  --text-primary: #0b2545;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 700px) {
+  .gallery-item.wide {
+    grid-column: span 1;
+  }
+
+  .gallery-item,
+  .gallery-item.tall {
+    height: 240px;
+  }
+}

@@ -1,0 +1,371 @@
+/* =========================================================
+   THEME VARIABLES
+========================================================= */
+:root {
+  --primary: #0B2545;
+  --accent: #C9A24D;
+  --text-main: #1C1C1C;
+
+  --glass-navbar: rgba(230,235,238,0.85);
+  --glass-surface: rgba(255,255,255,0.45);
+  --glass-hover: rgba(255,255,255,0.40);
+  --glass-active: rgba(201,162,77,0.22);
+  --glass-dropdown: rgba(240,245,248,0.97);
+}
+
+html[data-theme="dark"] {
+  --primary: #8FAECC;
+  --accent: #D4B15A;
+  --text-main: #EDEDED;
+
+  --glass-navbar: rgba(18,22,36,0.85);
+  --glass-surface: rgba(42,49,66,0.55);
+  --glass-hover: rgba(255,255,255,0.10);
+  --glass-active: rgba(212,177,90,0.22);
+  --glass-dropdown: rgba(18,22,36,0.95);
+}
+
+/* =========================================================
+   RESET + GLOBAL FIXES
+========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   NAVBAR CONTAINER (FIXED — CRITICAL)
+========================================================= */
+.glass-navbar {
+  position: fixed;        /* ← FIXED (was relative) */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 12px 24px;
+  background: var(--glass-navbar);
+
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.6),
+    0 12px 28px rgba(0,0,0,0.18);
+
+  transition: transform 0.35s ease;
+}
+
+/* Auto-hide state */
+.glass-navbar.nav-hidden {
+  transform: translateY(-110%);
+}
+
+/* =========================================================
+   PAGE OFFSET (MANDATORY FOR FIXED NAVBAR)
+========================================================= */
+main {
+  padding-top: 88px; /* adjust if navbar height changes */
+}
+
+/* =========================================================
+   BRAND
+========================================================= */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--glass-surface);
+}
+
+.brand-logo {
+  height: 56px;
+}
+
+.brand-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+/* =========================================================
+   NAV ITEMS
+========================================================= */
+.nav-items {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-item > a,
+.nav-item > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 18px;
+  border-radius: 999px;
+
+  font-size: 14.5px;
+  color: var(--text-main);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+
+  transition: background 0.25s ease;
+}
+
+.nav-item > a:hover,
+.nav-item > span:hover {
+  background: var(--glass-hover);
+}
+
+/* =========================================================
+   ACTIVE PILL (RESTORED + STABLE)
+========================================================= */
+.nav-item > a.active,
+.nav-item > span.active {
+  background: var(--glass-active);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.nav-item > a.active:hover,
+.nav-item > span.active:hover {
+  background: var(--glass-active);
+}
+
+/* =========================================================
+   DROPDOWN (LEVEL 1)
+========================================================= */
+.dropdown {
+  position: relative;
+}
+
+/* Hover corridor */
+.nav-item.dropdown::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: -48px;
+  right: -48px;
+  height: 48px;
+}
+
+/* Dropdown panel */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+
+  min-width: 260px;
+  padding: 12px;
+  border-radius: 22px;
+
+  background: var(--glass-dropdown);
+  backdrop-filter: blur(26px) saturate(170%);
+  -webkit-backdrop-filter: blur(26px) saturate(170%);
+
+  box-shadow: 0 18px 36px rgba(0,0,0,0.28);
+  list-style: none;
+  display: none;
+  z-index: 2000;
+}
+
+.dropdown:hover > .dropdown-menu,
+.dropdown-menu:hover {
+  display: block;
+}
+
+/* Right-aligned “More” */
+.dropdown-right > .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+/* =========================================================
+   DROPDOWN ITEMS
+========================================================= */
+.dropdown-menu li {
+  position: relative;
+  padding: 10px 16px 10px 30px;
+  border-radius: 14px;
+}
+
+.dropdown-menu li:hover {
+  background: var(--glass-hover);
+}
+
+.dropdown-menu li::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.dropdown-menu li a,
+.dropdown-menu li span {
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+/* =========================================================
+   SUBMENU (LEVEL 2 — LEFT OPENING)
+========================================================= */
+.submenu {
+  position: relative;
+}
+
+.submenu .nested {
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.submenu-left > .nested {
+  position: absolute;
+  top: 0;
+  right: 100%;
+  margin-right: 10px;
+
+  min-width: 220px;
+  padding: 12px;
+  border-radius: 18px;
+
+  background: var(--glass-dropdown);
+  backdrop-filter: blur(26px) saturate(170%);
+  -webkit-backdrop-filter: blur(26px) saturate(170%);
+
+  box-shadow: 0 18px 36px rgba(0,0,0,0.28);
+  display: none;
+  z-index: 3000;
+}
+
+.submenu-left:hover > .nested,
+.submenu-left > .nested:hover {
+  display: block;
+}
+
+/* Hover corridor */
+.submenu-left::after {
+  content: "";
+  position: absolute;
+  top: -24px;
+  bottom: -24px;
+  left: -48px;
+  width: 48px;
+}
+
+/* =========================================================
+   HAMBURGER (MOBILE)
+========================================================= */
+.hamburger {
+  display: none;
+  width: 42px;
+  height: 42px;
+  position: relative;
+  cursor: pointer;
+}
+
+.hamburger span {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  height: 2px;
+  background: var(--text-main);
+  border-radius: 2px;
+  transition:
+    transform 0.35s ease,
+    opacity 0.25s ease,
+    top 0.35s ease;
+}
+
+.hamburger span:nth-child(1) { top: 14px; }
+.hamburger span:nth-child(2) { top: 20px; }
+.hamburger span:nth-child(3) { top: 26px; }
+
+.hamburger.active span:nth-child(1) {
+  top: 20px;
+  transform: rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  top: 20px;
+  transform: rotate(-45deg);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+@media (max-width: 768px) {
+
+  .brand-logo { display: none; }
+  .hamburger { display: block; }
+
+  .nav-items {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+
+    background: var(--glass-dropdown);
+    backdrop-filter: blur(32px) saturate(180%);
+  }
+
+  .nav-items.open {
+    display: flex;
+  }
+
+  .dropdown-menu,
+  .submenu-left > .nested {
+    position: static;
+    display: none;
+    margin-top: 8px;
+    box-shadow: none;
+    background: transparent;
+    backdrop-filter: none;
+  }
+
+  .dropdown.open > .dropdown-menu,
+  .submenu-left.open > .nested {
+    display: block;
+  }
+
+  .nav-item.dropdown::after,
+  .submenu-left::after {
+    display: none;
+  }
+}

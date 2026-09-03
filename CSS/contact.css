@@ -1,0 +1,170 @@
+/* =====================================================
+   CONTACT PAGE — MODERN ACADEMIC DESIGN
+   Calm, professional, institution-grade
+===================================================== */
+
+/* ------------------------------
+   PALETTE (YOUR COLORS)
+------------------------------ */
+:root {
+  --primary-blue: #0b2545;   /* Oxford Blue */
+  --accent-gold: #9b7b3a;    /* Warm Gold */
+  --bg-main: #0e1b2c;
+  --bg-surface: #13253d;
+
+  --text-main: #e5e7eb;
+  --text-muted: #b6c0cc;
+
+  --border-soft: rgba(255, 255, 255, 0.12);
+  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* ------------------------------
+   FULL HEIGHT LAYOUT
+------------------------------ */
+main {
+  min-height: calc(100vh - var(--navbar-height, 72px));
+  display: flex;
+}
+
+.wrapper {
+  width: 100%;
+  display: flex;
+}
+
+/* ------------------------------
+   CONTACT SECTION
+------------------------------ */
+.section.contact-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 64px;
+
+  padding: 72px 80px;
+  background: var(--bg-main);
+}
+
+/* ------------------------------
+   LEFT — CONTENT
+------------------------------ */
+.contact-content {
+  max-width: 720px;
+}
+
+.contact-content h2 {
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 36px;
+  letter-spacing: 0.3px;
+}
+
+/* BLOCKS */
+.contact-block {
+  margin-bottom: 34px;
+}
+
+.contact-block h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  margin-bottom: 12px;
+  letter-spacing: 0.4px;
+}
+
+.contact-block p {
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--text-muted);
+}
+
+/* LINKS */
+.contact-block a {
+  color: var(--text-main);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-gold);
+  padding-bottom: 2px;
+}
+
+.contact-block a:hover {
+  color: var(--accent-gold);
+}
+
+/* LIST */
+.contact-block ul {
+  padding-left: 20px;
+}
+
+.contact-block li {
+  margin-bottom: 10px;
+  font-size: 1.02rem;
+  color: var(--text-muted);
+}
+
+.contact-block li::marker {
+  color: var(--accent-gold);
+}
+
+/* ------------------------------
+   RIGHT — MAP PANEL
+------------------------------ */
+.contact-map {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* MAP CARD */
+.contact-map iframe {
+  width: 100%;
+  max-width: 420px;
+  height: 320px;
+
+  border-radius: 12px;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-soft);
+
+  filter: grayscale(30%) contrast(105%);
+}
+
+/* ------------------------------
+   RESPONSIVE
+------------------------------ */
+@media (max-width: 1024px) {
+  .section.contact-grid {
+    padding: 64px 56px;
+    gap: 48px;
+  }
+}
+
+@media (max-width: 900px) {
+  .section.contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-map {
+    margin-top: 24px;
+  }
+
+  .contact-map iframe {
+    max-width: 100%;
+    height: 340px;
+  }
+}
+
+@media (max-width: 600px) {
+  .section.contact-grid {
+    padding: 48px 28px;
+  }
+
+  .contact-content h2 {
+    font-size: 2rem;
+  }
+
+  .contact-block p,
+  .contact-block li {
+    font-size: 0.98rem;
+  }
+}

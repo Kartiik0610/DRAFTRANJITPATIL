@@ -1,0 +1,256 @@
+/* =========================================
+   PUBLICATIONS PAGE — FULL CSS
+   Matched with Research Interests / Projects
+========================================= */
+
+/* ---------- WRAPPER ---------- */
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 72px 24px 64px;
+}
+
+/* ---------- GLASS BASE ---------- */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ---------- QUOTE ---------- */
+.publication-quote {
+  text-align: center;
+  padding: 52px 40px;
+  margin-bottom: 48px;
+}
+
+.publication-quote blockquote {
+  font-family: "Playfair Display", serif;
+  font-size: 1.6rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-primary);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.publication-quote span {
+  display: block;
+  margin-top: 16px;
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+
+/* ---------- SECTION ---------- */
+.section {
+  padding: 36px 42px;
+  margin-bottom: 48px;
+}
+
+.section:last-of-type {
+  margin-bottom: 24px;
+}
+
+.section h2 {
+  font-size: 1.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 36px;
+  position: relative;
+}
+
+.section h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -12px;
+  width: 60px;
+  height: 3px;
+  background: var(--accent-color);
+  border-radius: 3px;
+}
+
+/* ---------- PROFILE LINKS ---------- */
+.profile-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+}
+
+.profile-links a {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: all 0.25s ease;
+}
+
+.profile-links a:hover {
+  background: var(--accent-color);
+  color: #1c1406;
+}
+
+/* ---------- METRICS / COUNTS ---------- */
+.publication-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 18px;
+}
+
+.publication-stats .stat {
+  padding: 26px 18px;
+  text-align: center;
+  border-radius: 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+}
+
+.publication-stats strong {
+  display: block;
+  font-size: 2rem;
+  color: var(--accent-color);
+}
+
+.publication-stats span {
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+/* ---------- PUBLICATION LIST ---------- */
+.pub-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.pub-list > li {
+  position: relative;
+  padding-left: 22px;
+  margin-bottom: 18px;
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+.pub-list > li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  color: var(--accent-color);
+  font-size: 1.2rem;
+}
+
+.pub-list em {
+  font-style: italic;
+}
+
+.pub-list a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.pub-list a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- LONG LIST SPACING ---------- */
+.pub-list.long > li {
+  margin-bottom: 22px;
+}
+
+/* ---------- EDITORIAL / PATENT CARDS ---------- */
+.pub-card {
+  padding: 22px 26px;
+  border-radius: 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  margin-bottom: 18px;
+}
+
+.pub-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.pub-card p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+/* ---------- COLLAPSIBLE SECTIONS ---------- */
+.section.collapsible h2 {
+  cursor: pointer;
+}
+
+.section.collapsible h2::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 10px;
+  transform: rotate(90deg);
+  transition: transform 0.25s ease;
+}
+
+.section.collapsible.collapsed h2::before {
+  transform: rotate(0deg);
+}
+
+.section.collapsible.collapsed .content {
+  display: none;
+}
+
+/* ---------- THEME FALLBACKS ---------- */
+:root {
+  --text-primary: #e5e7eb;
+  --accent-color: #c9a227;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+/* Light theme override */
+html[data-theme="light"] {
+  --text-primary: #0b2545;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .wrapper {
+    padding: 56px 20px 48px;
+  }
+
+  .section {
+    padding: 32px 26px;
+  }
+
+  .publication-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .publication-quote {
+    padding: 40px 24px;
+  }
+
+  .publication-quote blockquote {
+    font-size: 1.35rem;
+  }
+
+  .section h2 {
+    font-size: 1.6rem;
+  }
+
+  .publication-stats {
+    grid-template-columns: 1fr;
+  }
+}

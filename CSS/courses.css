@@ -1,0 +1,156 @@
+/* =========================================
+   COURSES PAGE — FULL CSS
+   Matched with Publications / Research
+========================================= */
+
+/* ---------- WRAPPER ---------- */
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 72px 24px 64px;
+}
+
+/* ---------- GLASS BASE ---------- */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ---------- QUOTE ---------- */
+.courses-quote {
+  text-align: center;
+  padding: 52px 40px;
+  margin-bottom: 48px;
+}
+
+.courses-quote blockquote {
+  font-family: "Playfair Display", serif;
+  font-size: 1.6rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-primary);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.courses-quote span {
+  display: block;
+  margin-top: 16px;
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+
+/* ---------- SECTION ---------- */
+.section {
+  padding: 36px 42px;
+  margin-bottom: 48px;
+}
+
+.section:last-of-type {
+  margin-bottom: 24px;
+}
+
+.section h2 {
+  font-size: 1.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 36px;
+  position: relative;
+}
+
+.section h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -12px;
+  width: 60px;
+  height: 3px;
+  background: var(--accent-color);
+  border-radius: 3px;
+}
+
+/* ---------- COURSE GRID ---------- */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+/* ---------- COURSE CARD (CLICKABLE) ---------- */
+.course-card {
+  display: block;
+  padding: 18px 22px;
+  border-radius: 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+/* Hover */
+.course-card:hover {
+  background: var(--accent-color);
+  color: #1c1406;
+  transform: translateY(-2px);
+}
+
+/* Focus (Accessibility) */
+.course-card:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 3px;
+}
+
+/* ---------- OPTIONAL ICON INDICATOR ---------- */
+.course-card::after {
+  content: "↗";
+  float: right;
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+/* ---------- THEME FALLBACKS ---------- */
+:root {
+  --text-primary: #e5e7eb;
+  --accent-color: #c9a227;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+/* Light theme override */
+html[data-theme="light"] {
+  --text-primary: #0b2545;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .wrapper {
+    padding: 56px 20px 48px;
+  }
+
+  .section {
+    padding: 32px 26px;
+  }
+}
+
+@media (max-width: 600px) {
+  .courses-quote {
+    padding: 40px 24px;
+  }
+
+  .courses-quote blockquote {
+    font-size: 1.35rem;
+  }
+
+  .section h2 {
+    font-size: 1.6rem;
+  }
+}

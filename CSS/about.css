@@ -1,0 +1,194 @@
+/* =========================================
+   ABOUT PAGE — FULL STYLESHEET
+   Safe with shared navbar & footer
+========================================= */
+
+/* ---------- WRAPPER ---------- */
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 72px 24px 64px; /* reduced bottom space */
+}
+
+/* ---------- GLASS CARD ---------- */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ---------- QUOTE SECTION ---------- */
+.about-quote {
+  text-align: center;
+  padding: 52px 40px;
+  margin-bottom: 48px;
+}
+
+.about-quote blockquote {
+  font-family: "Playfair Display", serif;
+  font-size: 1.6rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-primary);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-quote span {
+  display: block;
+  margin-top: 16px;
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+
+/* ---------- SECTION BASE ---------- */
+.section {
+  padding: 36px 42px;
+  margin-bottom: 48px;
+}
+
+.section:last-of-type {
+  margin-bottom: 24px; /* tighten before footer */
+}
+
+.section h2 {
+  font-size: 1.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 36px;
+  position: relative;
+}
+
+.section h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -12px;
+  width: 60px;
+  height: 3px;
+  background: var(--accent-color);
+  border-radius: 3px;
+}
+
+/* ---------- TIMELINE ---------- */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.timeline-item h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.timeline-item p {
+  margin: 2px 0;
+}
+
+.year {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--accent-color);
+}
+
+.muted {
+  opacity: 0.7;
+}
+
+/* ---------- EXPERIENCE ---------- */
+.experience {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.exp-card {
+  padding: 26px 30px;
+  border-radius: 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+}
+
+.exp-card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.duration {
+  display: block;
+  margin: 8px 0 12px;
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+.exp-card ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.exp-card li {
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+/* ---------- THEME FALLBACKS ---------- */
+:root {
+  --text-primary: #e5e7eb;
+  --accent-color: #c9a227;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+/* Light theme override */
+html[data-theme="light"] {
+  --text-primary: #0b2545;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .wrapper {
+    padding: 56px 20px 48px;
+  }
+
+  .section {
+    padding: 32px 26px;
+  }
+
+  .timeline-item {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .year {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-quote {
+    padding: 40px 24px;
+  }
+
+  .about-quote blockquote {
+    font-size: 1.35rem;
+  }
+
+  .section h2 {
+    font-size: 1.6rem;
+  }
+}

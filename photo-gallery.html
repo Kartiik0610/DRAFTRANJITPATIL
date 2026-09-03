@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Photo Gallery | Dr. Ranjit A. Patil</title>
+
+  <!-- SHARED STYLES -->
+  <link rel="stylesheet" href="CSS/navbar.css" />
+  <link rel="stylesheet" href="CSS/footer.css" />
+
+  <!-- PAGE STYLE -->
+  <link rel="stylesheet" href="CSS/photo-gallery.css" />
+
+  <!-- SCRIPTS -->
+  <script defer src="JS/layout.js"></script>
+  <script defer src="JS/photo-gallery.js"></script>
+</head>
+
+<body>
+
+  <!-- SHARED NAVBAR -->
+  <div id="header"></div>
+
+  <!-- ================= MAIN ================= -->
+  <main>
+    <div class="wrapper">
+
+      <!-- ================= QUOTE ================= -->
+      <section class="gallery-quote glass">
+        <blockquote>
+          “Memory is the diary that we all carry about with us.”
+        </blockquote>
+        <span>— Oscar Wilde</span>
+      </section>
+
+      <!-- ================= GALLERY ================= -->
+      <section class="section glass">
+        <h2>Moments & Memories</h2>
+
+        <!-- Images injected dynamically -->
+        <div class="gallery-grid" id="galleryGrid"></div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- SHARED FOOTER -->
+  <div id="footer"></div>
+
+</body>
+</html>

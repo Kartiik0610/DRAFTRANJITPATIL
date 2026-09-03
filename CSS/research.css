@@ -1,0 +1,228 @@
+/* =========================================
+   RESEARCH INTERESTS PAGE — FULL CSS
+   Compatible with shared layout & theme
+========================================= */
+
+/* ---------- WRAPPER ---------- */
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 72px 24px 64px;
+}
+
+/* ---------- GLASS BASE ---------- */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ---------- QUOTE ---------- */
+.research-quote {
+  text-align: center;
+  padding: 52px 40px;
+  margin-bottom: 48px;
+}
+
+.research-quote blockquote {
+  font-family: "Playfair Display", serif;
+  font-size: 1.6rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-primary);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.research-quote span {
+  display: block;
+  margin-top: 16px;
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+
+/* ---------- SECTION ---------- */
+.section {
+  padding: 36px 42px;
+  margin-bottom: 48px;
+}
+
+.section:last-of-type {
+  margin-bottom: 24px;
+}
+
+.section h2 {
+  font-size: 1.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 36px;
+  position: relative;
+}
+
+.section h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -12px;
+  width: 60px;
+  height: 3px;
+  background: var(--accent-color);
+  border-radius: 3px;
+}
+
+/* ---------- RESEARCH LIST ---------- */
+.primary-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.primary-list > li {
+  position: relative;
+  padding-left: 22px;
+  margin-bottom: 18px;
+  line-height: 1.65;
+}
+
+.primary-list > li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  color: var(--accent-color);
+  font-size: 1.2rem;
+}
+
+.primary-list ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.primary-list ul li {
+  margin-bottom: 6px;
+  opacity: 0.85;
+}
+
+/* ---------- SOFTWARE SKILLS ---------- */
+.skill-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 32px;
+}
+
+.skill-list li {
+  position: relative;
+  padding-left: 22px;
+  line-height: 1.6;
+}
+
+.skill-list li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  top: 1px;
+  color: var(--accent-color);
+}
+
+/* ---------- THEME FALLBACKS ---------- */
+:root {
+  --text-primary: #e5e7eb;
+  --accent-color: #c9a227;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+/* Light theme override */
+html[data-theme="light"] {
+  --text-primary: #0b2545;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .wrapper {
+    padding: 56px 20px 48px;
+  }
+
+  .section {
+    padding: 32px 26px;
+  }
+
+  .skill-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .research-quote {
+    padding: 40px 24px;
+  }
+
+  .research-quote blockquote {
+    font-size: 1.35rem;
+  }
+
+  .section h2 {
+    font-size: 1.6rem;
+  }
+}
+
+/* =========================================
+   RESEARCH PROJECTS — EXTENSIONS
+========================================= */
+
+.project-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.year-block {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 28px;
+}
+
+.year-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.project-card {
+  padding: 22px 26px;
+  border-radius: 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+}
+
+.project-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.project-card p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+.project-card.highlight {
+  border-left: 4px solid var(--accent-color);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .year-block {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

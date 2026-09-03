@@ -1,0 +1,38 @@
+{
+  "journals": [
+    {
+      "authors": "R. B. Patil, A. Sharma",
+      "title": "Reliability assessment of hybrid renewable energy systems",
+      "journal": "International Journal of Quality & Reliability Management",
+      "year": 2023,
+      "doi": "https://doi.org/10.1108/IJQRM-2023-0156"
+    },
+    {
+      "authors": "R. B. Patil et al.",
+      "title": "Failure analysis of composite structures",
+      "journal": "Materials Today: Proceedings",
+      "year": 2022,
+      "doi": "https://doi.org/10.1016/j.matpr.2022.01.245"
+    }
+  ],
+
+  "conferences": [
+    {
+      "authors": "R. B. Patil, S. Mehta",
+      "title": "Design optimization of mechanical systems",
+      "conference": "ICAMMCE 2022",
+      "year": 2022,
+      "link": "https://aip.scitation.org/doi/10.1063/5.010001"
+    }
+  ],
+
+  "bookChapters": [
+    {
+      "authors": "R. B. Patil",
+      "title": "Advanced Manufacturing Systems",
+      "book": "Handbook of Mechanical Engineering",
+      "publisher": "Springer",
+      "year": 2021
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+/* =========================================
+   DOWNLOADS & ONGOING PAGE — FULL CSS
+   Matched with Publications Page
+========================================= */
+
+/* ---------- WRAPPER ---------- */
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 72px 24px 64px;
+}
+
+/* ---------- GLASS BASE ---------- */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ---------- QUOTE ---------- */
+.downloads-quote {
+  text-align: center;
+  padding: 52px 40px;
+  margin-bottom: 48px;
+}
+
+.downloads-quote blockquote {
+  font-family: "Playfair Display", serif;
+  font-size: 1.6rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-primary);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.downloads-quote span {
+  display: block;
+  margin-top: 16px;
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+
+/* ---------- SECTION ---------- */
+.section {
+  padding: 36px 42px;
+  margin-bottom: 48px;
+}
+
+.section:last-of-type {
+  margin-bottom: 24px;
+}
+
+.section h2 {
+  font-size: 1.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 36px;
+  position: relative;
+}
+
+.section h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -12px;
+  width: 60px;
+  height: 3px;
+  background: var(--accent-color);
+  border-radius: 3px;
+}
+
+/* ---------- SUBJECT GRID ---------- */
+.subject-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 22px;
+  align-items: stretch; /* equal height cards */
+}
+
+/* ---------- SUBJECT CARD ---------- */
+.subject-card {
+  padding: 24px 26px;
+  border-radius: 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+
+  display: flex;
+  flex-direction: column;
+  height: 520px; /* fixed height for all cards */
+}
+
+/* Subject Title */
+.subject-card h3 {
+  margin: 0 0 18px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  flex-shrink: 0;
+}
+
+/* ---------- CONTENT LIST (SCROLLABLE) ---------- */
+.subject-card ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* Scrollbar styling */
+.subject-card ul::-webkit-scrollbar {
+  width: 6px;
+}
+
+.subject-card ul::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+html[data-theme="light"] .subject-card ul::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- LIST ITEMS ---------- */
+.subject-card li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 14px;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.subject-card li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  color: var(--accent-color);
+  font-size: 1.2rem;
+}
+
+/* ---------- LINKS ---------- */
+.subject-card a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.subject-card a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- DOWNLOAD FULL BUTTON ---------- */
+.download-all {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: all 0.25s ease;
+
+  flex-shrink: 0;
+}
+
+.download-all:hover {
+  background: var(--accent-color);
+  color: #1c1406;
+}
+
+/* ---------- BADGE (OPTIONAL: ONGOING) ---------- */
+.subject-card .badge {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--accent-color);
+  color: #1c1406;
+}
+
+/* ---------- THEME FALLBACKS ---------- */
+:root {
+  --text-primary: #e5e7eb;
+  --accent-color: #c9a227;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+/* Light theme override */
+html[data-theme="light"] {
+  --text-primary: #0b2545;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .wrapper {
+    padding: 56px 20px 48px;
+  }
+
+  .section {
+    padding: 32px 26px;
+  }
+
+  .subject-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .subject-card {
+    height: 480px; /* slightly shorter on tablets */
+  }
+}
+
+@media (max-width: 600px) {
+  .downloads-quote {
+    padding: 40px 24px;
+  }
+
+  .downloads-quote blockquote {
+    font-size: 1.35rem;
+  }
+
+  .section h2 {
+    font-size: 1.6rem;
+  }
+
+  .subject-card {
+    height: 460px; /* mobile optimization */
+  }
+}
