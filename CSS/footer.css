@@ -32,17 +32,13 @@ body {
 }
 
 :root[data-theme="dark"]{
-  --bg-main: radial-gradient(circle at top, #111827, #05070c);
-  --bg-glass: linear-gradient(
-    180deg,
-    rgba(255,255,255,0.08),
-    rgba(255,255,255,0.02)
-  );
-  --bg-glass-inner: rgba(255,255,255,0.06);
-  --text-primary: #E6EAF0;
-  --text-secondary: #CBD5E1;
+  --bg-main: radial-gradient(circle at top, #1D2B3F, #0B1320);
+  --bg-glass: rgba(89, 13, 34, 0.45);
+  --bg-glass-inner: rgba(61, 12, 26, 0.35);
+  --text-primary: #FFFFFF;
+  --text-secondary: #E2E8F0;
   --border-soft: rgba(255,255,255,0.15);
-  --gold: rgba(201,162,77,0.95);
+  --gold: #F97316;
   background: var(--bg-main);
   color: var(--text-primary);
 }
