@@ -121,12 +121,10 @@ async function loadPublications() {
 
     const elTotal = document.getElementById("stat-total");
     const elJournal = document.getElementById("stat-journal");
-    const elConf = document.getElementById("stat-conf");
     const elBook = document.getElementById("stat-book");
     
     if (elTotal) elTotal.innerText = total;
     if (elJournal) elJournal.innerText = journals;
-    if (elConf) elConf.innerText = confs;
     if (elBook) elBook.innerText = books;
 
   } catch (error) {
