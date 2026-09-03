@@ -33,7 +33,7 @@ body {
 
 :root[data-theme="dark"]{
   --bg-main: radial-gradient(circle at top, #1D2B3F, #0B1320);
-  --bg-glass: rgba(89, 13, 34, 0.45);
+  --bg-glass: rgba(89, 13, 34, 0.1);
   --bg-glass-inner: rgba(61, 12, 26, 0.35);
   --text-primary: #FFFFFF;
   --text-secondary: #E2E8F0;
