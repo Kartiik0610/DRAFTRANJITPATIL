@@ -18,7 +18,7 @@ html[data-theme="dark"] {
   --accent: #F97316;
   --text-main: #FFFFFF;
 
-  --glass-navbar: rgba(61, 12, 26, 0.85);
+  --glass-navbar: rgba(61, 12, 26, 0.1);
   --glass-surface: rgba(89, 13, 34, 0.45);
   --glass-hover: rgba(255, 255, 255, 0.12);
   --glass-active: rgba(249, 115, 22, 0.22);
