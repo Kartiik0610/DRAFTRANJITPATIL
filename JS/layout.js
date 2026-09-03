@@ -5,18 +5,18 @@
 async function loadLayout() {
 
   /* ---------------- HEADER ---------------- */
-  const headerHTML = await fetch("/partials/navbar.html").then(r => r.text());
+  const headerHTML = await fetch("PARTIALS/navbar.html").then(r => r.text());
   document.getElementById("header").innerHTML = headerHTML;
 
   // ✅ Load navbar.js AFTER header is in DOM
-  await loadScript("/js/navbar.js");
+  await loadScript("JS/navbar.js");
 
   /* ---------------- FOOTER ---------------- */
-  const footerHTML = await fetch("/partials/footer.html").then(r => r.text());
+  const footerHTML = await fetch("PARTIALS/footer.html").then(r => r.text());
   document.getElementById("footer").innerHTML = footerHTML;
 
   // Footer script (if any)
-  loadScript("/js/footer.js");
+  loadScript("JS/footer.js");
 
   /* ---------------- ACTIVE NAV ---------------- */
   setActiveNav();
