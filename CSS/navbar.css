@@ -369,3 +369,66 @@ main {
     display: none;
   }
 }
+
+/* =========================================================
+   CUSTOM SCROLLBAR
+========================================================= */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+html[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--primary);
+}
+
+/* =========================================================
+   IMPROVED GLASSMORPHISM
+========================================================= */
+.glass, .glass-inner {
+  background: var(--glass-surface) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border-radius: 16px !important;
+}
+
+html[data-theme="dark"] .glass,
+html[data-theme="dark"] .glass-inner {
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+/* =========================================================
+   MOUSE TRACKER LIGHT
+========================================================= */
+#mouse-tracker {
+  position: fixed;
+  top: -250px;
+  left: -250px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 162, 77, 0.1) 0%, rgba(201, 162, 77, 0) 60%);
+  pointer-events: none;
+  z-index: 9998;
+  will-change: transform;
+  mix-blend-mode: multiply;
+}
+
+html[data-theme="dark"] #mouse-tracker {
+  background: radial-gradient(circle, rgba(212, 177, 90, 0.15) 0%, rgba(212, 177, 90, 0) 60%);
+  mix-blend-mode: screen;
+}
