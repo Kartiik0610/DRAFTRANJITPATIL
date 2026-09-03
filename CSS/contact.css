@@ -4,22 +4,6 @@
 ===================================================== */
 
 /* ------------------------------
-   PALETTE (YOUR COLORS)
------------------------------- */
-:root {
-  --primary-blue: #0b2545;   /* Oxford Blue */
-  --accent-gold: #9b7b3a;    /* Warm Gold */
-  --bg-main: #0e1b2c;
-  --bg-surface: #13253d;
-
-  --text-main: #e5e7eb;
-  --text-muted: #b6c0cc;
-
-  --border-soft: rgba(255, 255, 255, 0.12);
-  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.45);
-}
-
-/* ------------------------------
    FULL HEIGHT LAYOUT
 ------------------------------ */
 main {
@@ -42,7 +26,6 @@ main {
   gap: 64px;
 
   padding: 72px 80px;
-  background: var(--bg-main);
 }
 
 /* ------------------------------
@@ -55,7 +38,7 @@ main {
 .contact-content h2 {
   font-size: 2.4rem;
   font-weight: 600;
-  color: var(--text-main);
+  color: var(--text-primary);
   margin-bottom: 36px;
   letter-spacing: 0.3px;
 }
@@ -68,7 +51,7 @@ main {
 .contact-block h3 {
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--accent-gold);
+  color: var(--accent);
   margin-bottom: 12px;
   letter-spacing: 0.4px;
 }
@@ -76,19 +59,19 @@ main {
 .contact-block p {
   font-size: 1.02rem;
   line-height: 1.75;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 /* LINKS */
 .contact-block a {
-  color: var(--text-main);
+  color: var(--text-primary);
   text-decoration: none;
-  border-bottom: 1px solid var(--accent-gold);
+  border-bottom: 1px solid var(--accent);
   padding-bottom: 2px;
 }
 
 .contact-block a:hover {
-  color: var(--accent-gold);
+  color: var(--accent);
 }
 
 /* LIST */
@@ -99,11 +82,11 @@ main {
 .contact-block li {
   margin-bottom: 10px;
   font-size: 1.02rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .contact-block li::marker {
-  color: var(--accent-gold);
+  color: var(--accent);
 }
 
 /* ------------------------------
@@ -123,8 +106,7 @@ main {
 
   border-radius: 12px;
   border: 1px solid var(--border-soft);
-  background: var(--bg-surface);
-  box-shadow: var(--shadow-soft);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
 
   filter: grayscale(30%) contrast(105%);
 }
