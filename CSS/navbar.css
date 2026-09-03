@@ -412,23 +412,10 @@ html[data-theme="dark"] .glass-inner {
 }
 
 /* =========================================================
-   MOUSE TRACKER LIGHT
+   LAYOUT SPACING FIX (FULL WIDTH MATCHING NAVBAR)
 ========================================================= */
-#mouse-tracker {
-  position: fixed;
-  top: -250px;
-  left: -250px;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(201, 162, 77, 0.1) 0%, rgba(201, 162, 77, 0) 60%);
-  pointer-events: none;
-  z-index: 9998;
-  will-change: transform;
-  mix-blend-mode: multiply;
-}
-
-html[data-theme="dark"] #mouse-tracker {
-  background: radial-gradient(circle, rgba(212, 177, 90, 0.15) 0%, rgba(212, 177, 90, 0) 60%);
-  mix-blend-mode: screen;
+.wrapper, .footer-container {
+  max-width: 100% !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
 }

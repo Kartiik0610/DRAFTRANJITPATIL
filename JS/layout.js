@@ -49,18 +49,4 @@ function setActiveNav() {
 /* ---------- INIT ---------- */
 loadLayout();
 
-/* =========================================================
-   MOUSE TRACKER (SOFT LIGHT)
-========================================================= */
-document.addEventListener("DOMContentLoaded", () => {
-  const tracker = document.createElement("div");
-  tracker.id = "mouse-tracker";
-  document.body.appendChild(tracker);
 
-  document.addEventListener("mousemove", (e) => {
-    // We use requestAnimationFrame for smooth performance
-    requestAnimationFrame(() => {
-      tracker.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-    });
-  });
-});
