@@ -20,13 +20,13 @@ body {
    THEME VARIABLES
 ===================================================== */
 :root[data-theme="light"] {
-  --bg-main: #FFFFFF; /* FIXED */
-  --bg-glass: rgba(255, 255, 255, 0.94);
-  --bg-glass-inner: rgba(255, 255, 255, 0.88);
-  --text-primary: #0B2545;
-  --text-secondary: #5F6C7B;
-  --border-soft: rgba(11, 37, 69, 0.18);
-  --gold: #C9A24D;
+  --bg-main: radial-gradient(circle at top left, #f3e8ff, #e0f2fe, #fdf4ff);
+  --bg-glass: rgba(255, 255, 255, 0.7);
+  --bg-glass-inner: rgba(255, 255, 255, 0.5);
+  --text-primary: #3d2b56;
+  --text-secondary: #6B5B82;
+  --border-soft: rgba(224, 86, 253, 0.3);
+  --gold: #E056FD;
   background: var(--bg-main);
   color: var(--text-primary);
 }

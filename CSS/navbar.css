@@ -2,15 +2,15 @@
    THEME VARIABLES
 ========================================================= */
 :root {
-  --primary: #0B2545;
-  --accent: #C9A24D;
-  --text-main: #1C1C1C;
+  --primary: #4A2B68;
+  --accent: #E056FD;
+  --text-main: #2D1B3E;
 
-  --glass-navbar: rgba(230,235,238,0.85);
-  --glass-surface: rgba(255,255,255,0.45);
-  --glass-hover: rgba(255,255,255,0.40);
-  --glass-active: rgba(201,162,77,0.22);
-  --glass-dropdown: rgba(240,245,248,0.97);
+  --glass-navbar: rgba(255,255,255,0.75);
+  --glass-surface: rgba(255,255,255,0.60);
+  --glass-hover: rgba(255,255,255,0.85);
+  --glass-active: rgba(224, 86, 253, 0.25);
+  --glass-dropdown: rgba(255,255,255,0.95);
 }
 
 html[data-theme="dark"] {
