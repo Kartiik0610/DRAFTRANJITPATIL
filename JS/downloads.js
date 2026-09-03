@@ -9,7 +9,7 @@ const subjects = [
 ========================================================= */
 {
   title: "Electric Drives and Controls (EDC)",
-  ongoing: true,
+  ongoing: false,
   fullDownload: "PASTE_EDC_FOLDER_ID",
   items: [
     { label: "Syllabus", fileId: "PASTE_EDC_SYLLABUS_ID", type: "syllabus" },
@@ -41,7 +41,7 @@ const subjects = [
 ========================================================= */
 {
   title: "Data Analytics Laboratory (DJS23MLPE516)",
-  ongoing: true,
+  ongoing: false,
   fullDownload: "PASTE_DALAB_FOLDER_ID",
   items: [
     { label: "Individual Experiment Assessment", fileId: "PASTE_DALAB_RUB1", type: "rubric" },
@@ -61,7 +61,7 @@ const subjects = [
 ========================================================= */
 {
   title: "Mechanical Measurement and Metrology Laboratory (DJS23MLPC502)",
-  ongoing: true,
+  ongoing: false,
   fullDownload: "PASTE_MMM_FOLDER_ID",
   items: [
     { label: "Individual Experiment Assessment", fileId: "PASTE_MMM_RUB1", type: "rubric" },
@@ -134,7 +134,7 @@ const subjects = [
 ========================================================= */
 {
   title: "Numerical and Statistical Techniques (NST)",
-  ongoing: true,
+  ongoing: false,
   fullDownload: "PASTE_NST_FOLDER_ID",
   items: [
     { label: "MATLAB introduction", fileId: "PASTE_NST_EXP00", type: "experiment" },
@@ -262,7 +262,7 @@ const subjects = [
 ========================================================= */
 {
   title: "Data Analytics – Advanced Laboratory",
-  ongoing: true,
+  ongoing: false,
   fullDownload: "PASTE_DA_ADV_FOLDER_ID",
   items: [
     { label: "Reliability analysis of deep groove ball bearing", fileId: "PASTE_DA_ADV_EXP01", type: "experiment" },
@@ -273,7 +273,63 @@ const subjects = [
     { label: "Predictive maintenance", fileId: "PASTE_DA_ADV_EXP06", type: "experiment" }
   ]
 }
+,
+/* =========================================================
+   15. MANUFACTURING PROCESSES
+========================================================= */
+{
+  title: "Manufacturing Processes (DJS23MPC204)",
+  ongoing: true,
+  fullDownload: "PASTE_MP_FOLDER_ID",
+  items: [
+    { label: "Syllabus", fileId: "PASTE_MP_SYLLABUS", type: "syllabus" },
+    { label: "Quiz one", fileId: "PASTE_MP_QUIZ1", type: "topic" },
+    { label: "MODULE 1 NOTES", fileId: "PASTE_MP_MOD1", type: "unit" },
+    { label: "Module 2 Notes", fileId: "PASTE_MP_MOD2", type: "unit" }
+  ]
+},
 
+/* =========================================================
+   16. DATABASE MANAGEMENT SYSTEM LABORATORY
+========================================================= */
+{
+  title: "Database Management System Laboratory (DJS23MSC301L)",
+  ongoing: true,
+  fullDownload: "PASTE_DBMS_FOLDER_ID",
+  items: [
+    { label: "Syllabus", fileId: "PASTE_DBMS_SYLLABUS", type: "syllabus" },
+    { label: "Rubrics", fileId: "PASTE_DBMS_RUBRICS", type: "rubric" },
+    { label: "Assignment 1", fileId: "PASTE_DBMS_A1", type: "experiment" },
+    { label: "ER MODEL BASICS for the Exam", fileId: "PASTE_DBMS_ER", type: "topic" },
+    { label: "Symbols in ER diagram", fileId: "PASTE_DBMS_SYM", type: "topic" },
+    { label: "Assignment 2", fileId: "PASTE_DBMS_A2", type: "experiment" },
+    { label: "Assignment 2 Theory PPT", fileId: "PASTE_DBMS_A2_PPT", type: "topic" },
+    { label: "Assignment 3", fileId: "PASTE_DBMS_A3", type: "experiment" },
+    { label: "DATA BASE _ADVENTURE", fileId: "PASTE_DBMS_ADV", type: "topic" },
+    { label: "Assignment 3 Theory", fileId: "PASTE_DBMS_A3_TH", type: "topic" },
+    { label: "Assignment No. 4", fileId: "PASTE_DBMS_A4", type: "experiment" },
+    { label: "Assignment 4 Theory", fileId: "PASTE_DBMS_A4_TH", type: "topic" }
+  ]
+},
+
+/* =========================================================
+   17. ELECTRIC VEHICLE SYSTEM DESIGN AND SAFETY
+========================================================= */
+{
+  title: "Electric Vehicle System Design and Safety(DJS22MEHN1C4)",
+  ongoing: true,
+  fullDownload: "PASTE_EV_FOLDER_ID",
+  items: [
+    { label: "Syllabus", fileId: "PASTE_EV_SYLLABUS", type: "syllabus" },
+    { label: "Module 01", fileId: "PASTE_EV_MOD1", type: "unit" },
+    { label: "Module 02", fileId: "PASTE_EV_MOD2", type: "unit" },
+    { label: "Cabin Noise Modeling for Seat Location- ANSYS AND AI", fileId: "PASTE_EV_CABIN", type: "topic" },
+    { label: "Module 03", fileId: "PASTE_EV_MOD3", type: "unit" },
+    { label: "Module 04", fileId: "PASTE_EV_MOD4", type: "unit" },
+    { label: "Module 05", fileId: "PASTE_EV_MOD5", type: "unit" },
+    { label: "Module 06- Self study", fileId: "PASTE_EV_MOD6", type: "unit" }
+  ]
+}
 ];
 
 /* =========================================================
