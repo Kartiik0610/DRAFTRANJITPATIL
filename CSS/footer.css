@@ -287,6 +287,20 @@ body {
    RESPONSIVE
 ===================================================== */
 @media (max-width: 600px) {
+  .site-footer {
+    padding: 40px 16px 20px; /* Reduced top padding for mobile */
+  }
+
+  .footer-container {
+    gap: 24px; /* Reduced gap between sections */
+  }
+
+  .footer-section {
+    padding: 20px; /* Larger tap targets / more breathability */
+    border-radius: 16px;
+    background: var(--bg-glass-inner); /* Enforce glass look on mobile always */
+  }
+
   .footer-theme-row {
     justify-content: center;
   }

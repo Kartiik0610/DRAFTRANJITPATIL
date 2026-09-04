@@ -332,17 +332,21 @@ main {
 
   .nav-items {
     position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
+    top: calc(100% + 12px); /* Add space below navbar */
+    left: 16px;
+    right: 16px; /* Floating look with margin */
 
     display: none;
     flex-direction: column;
-    gap: 8px;
-    padding: 16px;
+    gap: 12px; /* Increased gap for better touch targets */
+    padding: 24px; /* More breathing room */
+    border-radius: 20px; /* Rounded corners */
 
     background: var(--glass-dropdown);
-    backdrop-filter: blur(32px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
   }
 
   .nav-items.open {
