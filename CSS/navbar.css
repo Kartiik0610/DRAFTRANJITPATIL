@@ -86,9 +86,32 @@ main {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 6px 16px;
+  padding: 6px 16px 6px 8px; /* Slightly less padding on left for logo */
   border-radius: 999px;
   background: var(--glass-surface);
+  
+  /* Glassmorphism */
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  
+  /* Link resets */
+  text-decoration: none;
+  color: var(--text-main);
+  
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.brand:hover {
+  background: var(--glass-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+html[data-theme="dark"] .brand {
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .brand-logo {
