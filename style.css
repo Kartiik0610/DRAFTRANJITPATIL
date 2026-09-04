@@ -17,7 +17,7 @@ body.light-ui {
 }
 
 body.dark-ui {
-  background: #0b0f14;
+  background: #1E1B18;
 }
 
 /* =========================
@@ -29,7 +29,7 @@ body.dark-ui {
   width: 420px;
   padding: 6px;
   border-radius: 999px;
-  border: 3px solid #0d6efd;
+  border: 3px solid #E67E22;
   transition: background 0.3s ease;
 }
 
@@ -39,11 +39,11 @@ body.light-ui .theme-switch {
 }
 
 body.dark-ui .theme-switch {
-  background: #0b0f14;
+  background: #1E1B18;
 }
 
 /* =========================
-   SLIDING BLUE CAPSULE
+   SLIDING ORANGE CAPSULE
 ========================= */
 .indicator {
   position: absolute;
@@ -51,7 +51,7 @@ body.dark-ui .theme-switch {
   left: 6px;
   height: calc(100% - 12px);
   width: calc(33.333% - 4px);
-  background: #0d6efd;
+  background: #E67E22;
   border-radius: 999px;
   transition: transform 0.35s ease;
   z-index: 0;
@@ -73,27 +73,13 @@ body.dark-ui .theme-switch {
   transition: color 0.25s ease;
 }
 
-/* TEXT COLORS */
-body.light-ui .theme-switch button {
-  color: #0d6efd;
-}
-
-body.dark-ui .theme-switch button {
-  color: #4da3ff;
-}
-
-/* ACTIVE TEXT */
-.theme-switch button.active {
-  color: #ffffff;
-}
-
 /* DEFAULT (NOT SELECTED) TEXT COLOR */
 body.light-ui .theme-switch button {
-  color: #0d6efd;        /* blue text */
+  color: #E67E22;        /* orange text */
 }
 
 body.dark-ui .theme-switch button {
-  color: #4da3ff;        /* lighter blue text */
+  color: #D35400;        /* darker orange text */
 }
 
 /* ===== SELECTED BUTTON TEXT ===== */

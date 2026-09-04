@@ -14,15 +14,15 @@
 }
 
 html[data-theme="dark"] {
-  --primary: #F97316;
-  --accent: #F97316;
+  --primary: #E67E22;
+  --accent: #D35400;
   --text-main: #FFFFFF;
 
-  --glass-navbar: rgba(61, 12, 26, 0.1);
-  --glass-surface: rgba(89, 13, 34, 0.45);
-  --glass-hover: rgba(255, 255, 255, 0.12);
-  --glass-active: rgba(249, 115, 22, 0.22);
-  --glass-dropdown: rgba(61, 12, 26, 0.95);
+  --glass-navbar: rgba(30, 25, 20, 0.6);
+  --glass-surface: rgba(40, 32, 26, 0.65);
+  --glass-hover: rgba(255, 255, 255, 0.1);
+  --glass-active: rgba(230, 126, 34, 0.25);
+  --glass-dropdown: rgba(26, 22, 18, 0.95);
 }
 
 /* =========================================================
