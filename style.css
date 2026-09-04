@@ -13,7 +13,7 @@ body {
 
 /* LIGHT & DARK PAGE */
 body.light-ui {
-  background: #f4f6f8;
+  background: linear-gradient(135deg, #F5F7FA 0%, #FCEAE8 100%);
 }
 
 body.dark-ui {
@@ -29,21 +29,23 @@ body.dark-ui {
   width: 420px;
   padding: 6px;
   border-radius: 999px;
-  border: 3px solid #E67E22;
-  transition: background 0.3s ease;
+  border: 3px solid transparent; /* controlled by theme */
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-/* LIGHT / DARK CAPSULE BACKGROUND */
+/* LIGHT / DARK CAPSULE BACKGROUND & BORDER */
 body.light-ui .theme-switch {
   background: #ffffff;
+  border-color: #2C3E50;
 }
 
 body.dark-ui .theme-switch {
   background: #1E1B18;
+  border-color: #E67E22;
 }
 
 /* =========================
-   SLIDING ORANGE CAPSULE
+   SLIDING CAPSULE
 ========================= */
 .indicator {
   position: absolute;
@@ -51,10 +53,17 @@ body.dark-ui .theme-switch {
   left: 6px;
   height: calc(100% - 12px);
   width: calc(33.333% - 4px);
-  background: #E67E22;
   border-radius: 999px;
-  transition: transform 0.35s ease;
+  transition: transform 0.35s ease, background 0.3s ease;
   z-index: 0;
+}
+
+body.light-ui .indicator {
+  background: #2C3E50;
+}
+
+body.dark-ui .indicator {
+  background: #E67E22;
 }
 
 /* =========================
@@ -75,7 +84,7 @@ body.dark-ui .theme-switch {
 
 /* DEFAULT (NOT SELECTED) TEXT COLOR */
 body.light-ui .theme-switch button {
-  color: #E67E22;        /* orange text */
+  color: #2C3E50;        /* navy text */
 }
 
 body.dark-ui .theme-switch button {

@@ -17,13 +17,13 @@ body {
    THEME VARIABLES
 ===================================================== */
 :root[data-theme="light"] {
-  --bg-main: radial-gradient(circle at top left, #f3e8ff, #e0f2fe, #fdf4ff);
-  --bg-glass: rgba(255, 255, 255, 0.7);
-  --bg-glass-inner: rgba(255, 255, 255, 0.5);
-  --text-primary: #3d2b56;
-  --text-secondary: #6B5B82;
-  --border-soft: rgba(224, 86, 253, 0.3);
-  --gold: #E056FD;
+  --bg-main: radial-gradient(circle at top left, #F5F7FA, #FCEAE8);
+  --bg-glass: rgba(255, 255, 255, 0.6);
+  --bg-glass-inner: rgba(255, 255, 255, 0.4);
+  --text-primary: #1A252F;
+  --text-secondary: #2C3E50;
+  --border-soft: rgba(44, 62, 80, 0.2);
+  --gold: #6E472E;
   background: var(--bg-main);
   color: var(--text-primary);
 }
