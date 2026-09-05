@@ -90,26 +90,6 @@ const subjects = [
   ]
 },
 
-/* =========================================================
-   5. ISTE STTP
-========================================================= */
-{
-  title: "ISTE Approved One-Week STTP",
-  ongoing: false,
-  fullDownload: "PASTE_ISTE_FOLDER_ID",
-  items: [
-    { label: "From Draft to Publication: Research Article Writing", fileId: "PASTE_ISTE_OVERVIEW", type: "topic" },
-
-    { label: "Fundamentals of research article writing", fileId: "PASTE_ISTE_S01", type: "session" },
-    { label: "Journal indexing & quality metrics", fileId: "PASTE_ISTE_S02", type: "session" },
-    { label: "Ethics, plagiarism & referencing tools", fileId: "PASTE_ISTE_S03", type: "session" },
-
-    { label: "Title Page", fileId: "PASTE_ISTE_FORM1", type: "form" },
-    { label: "Cover Letter", fileId: "PASTE_ISTE_FORM2", type: "form" },
-    { label: "Response File", fileId: "PASTE_ISTE_FORM3", type: "form" },
-    { label: "Author Statement", fileId: "PASTE_ISTE_FORM4", type: "form" }
-  ]
-},
 
 /* =========================================================
    6. BUSINESS ANALYTICS
@@ -282,7 +262,7 @@ const subjects = [
   ongoing: true,
   fullDownload: "PASTE_MP_FOLDER_ID",
   items: [
-    { label: "Syllabus", fileId: "PASTE_MP_SYLLABUS", type: "syllabus" },
+    { label: "Syllabus", fileId: "https://svkmmumbai-my.sharepoint.com/my?id=%2Fpersonal%2Franjit%5Fpatil%5Fdjsce%5Fac%5Fin%2FDocuments%2FDesktop%2F2026%2D27%2FSEM%20I%2FMP%2FMP%20Syllabus%2Epdf&parent=%2Fpersonal%2Franjit%5Fpatil%5Fdjsce%5Fac%5Fin%2FDocuments%2FDesktop%2F2026%2D27%2FSEM%20I%2FMP&ga=1", type: "syllabus" },
     { label: "Quiz one", fileId: "PASTE_MP_QUIZ1", type: "topic" },
     { label: "MODULE 1 NOTES", fileId: "PASTE_MP_MOD1", type: "unit" },
     { label: "Module 2 Notes", fileId: "PASTE_MP_MOD2", type: "unit" }
@@ -320,7 +300,7 @@ const subjects = [
   ongoing: true,
   fullDownload: "PASTE_EV_FOLDER_ID",
   items: [
-    { label: "Syllabus", fileId: "PASTE_EV_SYLLABUS", type: "syllabus" },
+    { label: "Syllabus", fileId: "https://svkmmumbai-my.sharepoint.com/my?id=%2Fpersonal%2Franjit%5Fpatil%5Fdjsce%5Fac%5Fin%2FDocuments%2FDesktop%2F2026%2D27%2FSEM%20I%2FMP%2FMP%20Syllabus%2Epdf&parent=%2Fpersonal%2Franjit%5Fpatil%5Fdjsce%5Fac%5Fin%2FDocuments%2FDesktop%2F2026%2D27%2FSEM%20I%2FMP&ga=1", type: "syllabus" },
     { label: "Module 01", fileId: "PASTE_EV_MOD1", type: "unit" },
     { label: "Module 02", fileId: "PASTE_EV_MOD2", type: "unit" },
     { label: "Cabin Noise Modeling for Seat Location- ANSYS AND AI", fileId: "PASTE_EV_CABIN", type: "topic" },
@@ -400,7 +380,7 @@ function renderSection(title, items = []) {
 }
 
 function createItemHTML(item) {
-  const view = `https://drive.google.com/file/d/${item.fileId}/view`;
+  const view = `${item.fileId}`;
   const dl = `https://drive.google.com/uc?export=download&id=${item.fileId}`;
 
   return `
