@@ -19,27 +19,27 @@ const subjects = [
     },
 
     // Notes
-    { label: "Module 1:", 
+    { label: "Module 1", 
       fileId: "https://svkmmumbai-my.sharepoint.com/my?id=%2Fpersonal%2Franjit%5Fpatil%5Fdjsce%5Fac%5Fin%2FDocuments%2FDesktop%2F2026%2D27%2FSEM%20I%2FMP%2Fnotes%20Module%201%20Introduction%20and%20Casting%2Epdf&parent=%2Fpersonal%2Franjit%5Fpatil%5Fdjsce%5Fac%5Fin%2FDocuments%2FDesktop%2F2026%2D27%2FSEM%20I%2FMP&ga=1 ", 
       type: "unit" 
     },
-    { label: "Module 2: Basics of Power Conversion", 
+    { label: "Module 2", 
       fileId: "https://svkmmumbai-my.sharepoint.com/my?id=%2Fpersonal%2Franjit%5Fpatil%5Fdjsce%5Fac%5Fin%2FDocuments%2FDesktop%2F2026%2D27%2FSEM%20I%2FMP%2FModule%202%20forming%20notes%2Epdf&parent=%2Fpersonal%2Franjit%5Fpatil%5Fdjsce%5Fac%5Fin%2FDocuments%2FDesktop%2F2026%2D27%2FSEM%20I%2FMP&ga=1", 
       type: "unit" 
     },
-    { label: "Module 3: Elements of Drives", 
+    { label: "Module 3", 
       fileId: "PASTE_EDC_UNIT02_ID", 
       type: "unit", disabled: true      
     },
-    { label: "Module 4: EV Motor Drive Topologies – I", 
+    { label: "Module 4", 
       fileId: "PASTE_EDC_UNIT03_ID", 
       type: "unit" ,disabled: true
     },
-    { label: "Module 5: EV Motor Drive Topologies – I", 
+    { label: "Module 5", 
       fileId: "PASTE_EDC_UNIT03_ID", 
       type: "unit" ,disabled: true
     },
-    { label: "Module 6: EV Motor Drive Topologies – I", 
+    { label: "Module 6", 
       fileId: "PASTE_EDC_UNIT03_ID", 
       type: "unit" ,disabled: true
     },
@@ -113,7 +113,7 @@ const subjects = [
   fullDownload: "",
   items: [
     // syllabus
-    { label: "Individual Experiment Assessment", 
+    { label: "Syllabus", 
       fileId: "https://svkmmumbai-my.sharepoint.com/my?id=%2Fpersonal%2Franjit%5Fpatil%5Fdjsce%5Fac%5Fin%2FDocuments%2FDesktop%2F2025%2D26%2FSEM%20II%2FEVSD%2FHonors%20in%20Electric%20Vehicles%20%28DJS22%29%2Epdf&parent=%2Fpersonal%2Franjit%5Fpatil%5Fdjsce%5Fac%5Fin%2FDocuments%2FDesktop%2F2025%2D26%2FSEM%20II%2FEVSD&ga=1", 
       type: "syllabus" 
     },
@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </ul>
 
         <a class="download-all"
-           href="https://drive.google.com/drive/folders/${subject.fullDownload}"
+           href=""
            target="_blank"
            rel="noopener">
           Download All Notes
