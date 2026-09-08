@@ -74,6 +74,7 @@ function renderSubjects(subjectsData, grid) {
 
         <ul class="subject-items">
           ${renderSection("Syllabus", grouped.syllabus)}
+          ${renderSection("Marks", grouped.marks)}
           ${renderSection("Units", grouped.unit)}
           ${renderSection("Assessment Rubrics", grouped.rubric)}
           ${renderSection("Experiments", grouped.experiment)}
@@ -153,6 +154,7 @@ function parseCSVToSubjects(csvText) {
     if (rtLower.includes("syllabus")) type = "syllabus";
     else if (rtLower.includes("lecture notes")) type = "unit";
     else if (rtLower.includes("rubric")) type = "rubric";
+    else if (rtLower.includes("marks")) type = "marks";
     else if (rtLower.includes("lab manual")) type = "experiment";
     else if (rtLower.includes("assignment")) type = "assignment";
     else if (rtLower.includes("topic")) type = "topic";
