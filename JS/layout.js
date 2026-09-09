@@ -46,6 +46,16 @@ function setActiveNav() {
   });
 }
 
+/* ---------- SET FAVICON ---------- */
+function setFavicon() {
+  const link = document.createElement('link');
+  link.rel = 'icon';
+  link.type = 'image/png';
+  link.href = 'favicon.png';
+  document.head.appendChild(link);
+}
+setFavicon();
+
 /* ---------- INIT ---------- */
 loadLayout();
 
