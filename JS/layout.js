@@ -66,6 +66,16 @@ function initVercelAnalytics() {
 }
 initVercelAnalytics();
 
+/* ---------- VERCEL SPEED INSIGHTS ---------- */
+function initVercelSpeedInsights() {
+  window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  const script = document.createElement('script');
+  script.defer = true;
+  script.src = '/_vercel/speed-insights/script.js';
+  document.head.appendChild(script);
+}
+initVercelSpeedInsights();
+
 /* ---------- INIT ---------- */
 loadLayout();
 
