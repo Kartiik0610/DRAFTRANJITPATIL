@@ -56,6 +56,16 @@ function setFavicon() {
 }
 setFavicon();
 
+/* ---------- VERCEL ANALYTICS ---------- */
+function initVercelAnalytics() {
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  const script = document.createElement('script');
+  script.defer = true;
+  script.src = '/_vercel/insights/script.js';
+  document.head.appendChild(script);
+}
+initVercelAnalytics();
+
 /* ---------- INIT ---------- */
 loadLayout();
 
