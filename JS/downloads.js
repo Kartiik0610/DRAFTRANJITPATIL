@@ -40,15 +40,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     // Convert CSV to structured data
     const freshSubjects = parseCSVToSubjects(csvText);
-    
-    // Update cache
-    localStorage.setItem(CACHE_KEY, JSON.stringify(freshSubjects));
+    const freshDataString = JSON.stringify(freshSubjects);
     
     // Update UI if data changed or if it's the first load
-    if (!cachedData || JSON.stringify(freshSubjects) !== cachedData) {
+    if (!cachedData || freshDataString !== cachedData) {
       subjects = freshSubjects;
       grid.innerHTML = ""; // Clear grid
       renderSubjects(subjects, grid);
+      
+      // Update cache
+      localStorage.setItem(CACHE_KEY, freshDataString);
+
+      // Only show Toast if it's an update to existing cached data (not first visit)
+      if (cachedData) {
+        showToast("🔔 New study materials were just added!");
+      }
     }
   } catch (error) {
     console.error("Failed to fetch subjects data:", error);
@@ -57,6 +63,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 });
+
+function showToast(msg) {
+  const toast = document.createElement("div");
+  toast.innerText = msg;
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--primary-color, #f39c12);
+    color: #111;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    font-weight: 600;
+    font-size: 1rem;
+    z-index: 99999;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  `;
+  document.body.appendChild(toast);
+  
+  // Animate in
+  setTimeout(() => {
+    toast.style.opacity = "1";
+    toast.style.transform = "translateY(0)";
+  }, 100);
+
+  // Animate out after 6 seconds
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(20px)";
+    setTimeout(() => toast.remove(), 400);
+  }, 6000);
+}
 
 function renderSubjects(subjectsData, grid) {
   const showOngoingOnly = grid.dataset.ongoing === "true";
