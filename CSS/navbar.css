@@ -35,6 +35,10 @@ html[data-theme="dark"] {
   font-family: "Segoe UI", system-ui, sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
   max-width: 100%;
   overflow-x: hidden;
