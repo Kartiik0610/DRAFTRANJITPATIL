@@ -84,38 +84,60 @@ main {
 }
 
 /* =========================================================
-   BRAND
+   BRAND (INSTAGRAM STORY EFFECT)
 ========================================================= */
 .brand {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 14px;
   padding: 6px 16px 6px 8px; /* Slightly less padding on left for logo */
   border-radius: 999px;
-  background: var(--glass-surface);
   
   /* Glassmorphism */
+  background: var(--glass-surface);
   backdrop-filter: blur(12px) saturate(140%);
   -webkit-backdrop-filter: blur(12px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  
+  /* Transparent border to reveal the gradient underneath */
+  border: 3px solid transparent;
+  background-clip: padding-box;
   
   /* Link resets */
   text-decoration: none;
   color: var(--text-main);
   
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, background 0.3s ease;
+  z-index: 1;
 }
 
+/* The Instagram Gradient Ring */
+.brand::before {
+  content: "";
+  position: absolute;
+  top: -3px; right: -3px; bottom: -3px; left: -3px;
+  z-index: -1;
+  border-radius: 999px;
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  background-size: 200% 200%;
+  animation: ig-gradient-shift 4s ease infinite;
+}
+
+@keyframes ig-gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Hover "Grow" Effect */
 .brand:hover {
   background: var(--glass-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: scale(1.08);
+  box-shadow: 0 12px 28px rgba(220, 39, 67, 0.25); /* Subtle pink/red glow */
 }
 
-html[data-theme="dark"] .brand {
-  border-color: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+html[data-theme="dark"] .brand:hover {
+  box-shadow: 0 12px 28px rgba(220, 39, 67, 0.4);
 }
 
 .brand-logo {
