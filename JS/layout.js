@@ -12,7 +12,7 @@ async function loadLayout() {
   await loadScript("JS/navbar.js");
 
   /* ---------------- FOOTER ---------------- */
-  const footerHTML = await fetch("PARTIALS/footer.html").then(r => r.text());
+  const footerHTML = await fetch("PARTIALS/footer.html?v=2").then(r => r.text());
   document.getElementById("footer").innerHTML = footerHTML;
 
   // Footer script (if any)
