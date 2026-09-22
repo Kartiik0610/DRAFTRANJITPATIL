@@ -96,9 +96,11 @@
 
 /* Hover */
 .course-card:hover {
-  background: var(--accent-color);
-  color: #FDFBF7;
-  transform: translateY(-2px);
+  background: var(--glass-bg);
+  border-color: var(--accent-color);
+  color: var(--text-primary);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(202, 35, 37, 0.08);
 }
 
 /* Focus (Accessibility) */
@@ -125,9 +127,10 @@
 
 /* Light theme override */
 html[data-theme="light"] {
-  --text-primary: #850101;
-  --glass-bg: rgba(255, 255, 255, 0.7);
+  --text-primary: #202124;
+  --glass-bg: rgba(253, 251, 247, 0.95);
   --glass-border: rgba(0, 0, 0, 0.08);
+  --accent-color: #CA2325;
 }
 
 /* ---------- RESPONSIVE ---------- */
@@ -154,3 +157,5 @@ html[data-theme="light"] {
     font-size: 1.6rem;
   }
 }
+
+

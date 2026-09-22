@@ -5,13 +5,13 @@
   --primary: #CA2325;
   --accent: #D3212D;
   --secondary: #FF6F3C;
-  --text-main: #850101;
+  --text-main: #202124;
 
-  --glass-navbar: rgba(253, 251, 247, 0.75);
-  --glass-surface: rgba(253, 251, 247, 0.65);
-  --glass-hover: rgba(253, 251, 247, 0.9);
-  --glass-active: rgba(202, 35, 37, 0.15);
-  --glass-dropdown: rgba(253, 251, 247, 0.95);
+  --glass-navbar: rgba(253, 251, 247, 0.95);
+  --glass-surface: rgba(253, 251, 247, 0.85);
+  --glass-hover: rgba(253, 251, 247, 1);
+  --glass-active: rgba(202, 35, 37, 0.08);
+  --glass-dropdown: rgba(253, 251, 247, 0.98);
 }
 
 html[data-theme="dark"] {
@@ -456,3 +456,4 @@ html[data-theme="dark"] .glass-inner {
   padding-left: 24px !important;
   padding-right: 24px !important;
 }
+

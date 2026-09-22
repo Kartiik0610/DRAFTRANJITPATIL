@@ -84,7 +84,7 @@ body.dark-ui .indicator {
 
 /* DEFAULT (NOT SELECTED) TEXT COLOR */
 body.light-ui .theme-switch button {
-  color: #CA2325;        /* Sindoor Red text */
+  color: #202124;        /* Dark text */
 }
 
 body.dark-ui .theme-switch button {
@@ -95,3 +95,4 @@ body.dark-ui .theme-switch button {
 .theme-switch button.active {
   color: #ffffff !important;   /* FORCE WHITE */
 }
+
