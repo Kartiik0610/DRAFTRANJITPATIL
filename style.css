@@ -13,7 +13,7 @@ body {
 
 /* LIGHT & DARK PAGE */
 body.light-ui {
-  background: linear-gradient(135deg, #F5F7FA 0%, #FCEAE8 100%);
+  background: #FDFBF7;
 }
 
 body.dark-ui {
@@ -35,8 +35,8 @@ body.dark-ui {
 
 /* LIGHT / DARK CAPSULE BACKGROUND & BORDER */
 body.light-ui .theme-switch {
-  background: #ffffff;
-  border-color: #2C3E50;
+  background: #FDFBF7;
+  border-color: #CA2325;
 }
 
 body.dark-ui .theme-switch {
@@ -59,7 +59,7 @@ body.dark-ui .theme-switch {
 }
 
 body.light-ui .indicator {
-  background: #2C3E50;
+  background: #CA2325;
 }
 
 body.dark-ui .indicator {
@@ -84,7 +84,7 @@ body.dark-ui .indicator {
 
 /* DEFAULT (NOT SELECTED) TEXT COLOR */
 body.light-ui .theme-switch button {
-  color: #2C3E50;        /* navy text */
+  color: #CA2325;        /* Sindoor Red text */
 }
 
 body.dark-ui .theme-switch button {

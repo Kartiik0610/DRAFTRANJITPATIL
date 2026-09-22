@@ -17,13 +17,13 @@ body {
    THEME VARIABLES
 ===================================================== */
 :root[data-theme="light"] {
-  --bg-main: radial-gradient(circle at top left, #F5F7FA, #FCEAE8);
-  --bg-glass: rgba(255, 255, 255, 0.6);
-  --bg-glass-inner: rgba(255, 255, 255, 0.4);
-  --text-primary: #1A252F;
-  --text-secondary: #2C3E50;
-  --border-soft: rgba(44, 62, 80, 0.2);
-  --gold: #6E472E;
+  --bg-main: #FDFBF7;
+  --bg-glass: rgba(253, 251, 247, 0.75);
+  --bg-glass-inner: rgba(253, 251, 247, 0.55);
+  --text-primary: #850101;
+  --text-secondary: #CA2325;
+  --border-soft: rgba(202, 35, 37, 0.2);
+  --gold: #FF6F3C;
   background: var(--bg-main);
   color: var(--text-primary);
 }
@@ -266,7 +266,7 @@ body {
 }
 
 .theme-switch button.active {
-  color: #1C1406;
+  color: #850101;
 }
 
 /* =====================================================
@@ -337,7 +337,7 @@ body {
 
 /* Active label (on gold) */
 .theme-switch button.active {
-  color: #1C1406;
+  color: #850101;
 }
 
 /* Gold indicator stays premium but softer */

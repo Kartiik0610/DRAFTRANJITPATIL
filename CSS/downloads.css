@@ -174,7 +174,7 @@ html[data-theme="light"] .subject-card ul::-webkit-scrollbar-thumb {
 
 .download-all:hover {
   background: var(--accent-color);
-  color: #1c1406;
+  color: #FDFBF7;
 }
 
 /* ---------- BADGE (OPTIONAL: ONGOING) ---------- */
@@ -186,20 +186,20 @@ html[data-theme="light"] .subject-card ul::-webkit-scrollbar-thumb {
   font-size: 0.75rem;
   font-weight: 600;
   background: var(--accent-color);
-  color: #1c1406;
+  color: #FDFBF7;
 }
 
 /* ---------- THEME FALLBACKS ---------- */
 :root {
   --text-primary: #e5e7eb;
-  --accent-color: #c9a227;
+  --accent-color: #FF6F3C;
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.15);
 }
 
 /* Light theme override */
 html[data-theme="light"] {
-  --text-primary: #0b2545;
+  --text-primary: #850101;
   --glass-bg: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(0, 0, 0, 0.08);
 }
