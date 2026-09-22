@@ -108,9 +108,7 @@ main {
 }
 
 .brand:hover {
-  background: var(--glass-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  /* Hover effects removed per request */
 }
 
 html[data-theme="dark"] .brand {
@@ -355,6 +353,13 @@ html[data-theme="dark"] .brand {
 @media (max-width: 768px) {
 
   .brand-logo { display: none; }
+  
+  /* Fix text alignment when logo is hidden on mobile */
+  .brand {
+    padding: 6px 16px !important; 
+    justify-content: center;
+  }
+  
   .hamburger { display: block; }
 
   .nav-items {

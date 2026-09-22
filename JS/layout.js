@@ -18,6 +18,16 @@ async function loadLayout() {
   // Footer script (if any)
   loadScript("JS/footer.js");
 
+  /* ---------------- STORY INTEGRATION ---------------- */
+  // Load Story CSS dynamically
+  const storyCSS = document.createElement("link");
+  storyCSS.rel = "stylesheet";
+  storyCSS.href = "CSS/story.css?v=" + new Date().getTime(); // Cache buster
+  document.head.appendChild(storyCSS);
+
+  // Load Story JS dynamically
+  loadScript("JS/story.js?v=" + new Date().getTime()); // Cache buster
+
   /* ---------------- ACTIVE NAV ---------------- */
   setActiveNav();
 }
