@@ -139,17 +139,17 @@ main .glass {
    CONTACT SECTION
 ===================================================== */
 .section.contact {
-  padding: 56px 48px;
-  margin-top: 70px;
+  padding: 36px 42px;
+  margin-top: 48px;
 }
 
 .section.contact h2 {
-  margin-bottom: 26px;
+  margin-bottom: 20px;
 }
 
 .section.contact p {
-  margin-bottom: 12px;
-  line-height: 1.8;
+  margin-bottom: 8px;
+  line-height: 1.6;
 }
 
 /* =====================================================
