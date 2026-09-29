@@ -15,11 +15,11 @@
   <style>
     /* 404 Page Specific Styles */
     main {
-      min-height: calc(100vh - 150px);
+      min-height: calc(100vh - var(--navbar-height, 72px));
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px 24px;
+      padding: 120px 24px 60px; /* Space for navbar */
     }
 
     .error-card {
