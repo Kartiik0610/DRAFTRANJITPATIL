@@ -126,7 +126,6 @@ main .glass {
   color: var(--text-primary);
   margin-bottom: 22px;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--border-soft);
 }
 
 .section li {
@@ -150,6 +149,7 @@ main .glass {
 .section.contact p {
   margin-bottom: 8px;
   line-height: 1.6;
+  word-break: break-word;
 }
 
 /* =====================================================
@@ -217,7 +217,11 @@ main .glass {
 
   .header,
   .section {
-    padding: 32px;
+    padding: 32px 24px;
+  }
+
+  .section.contact {
+    padding: 32px 24px;
   }
 
   .name {
@@ -233,6 +237,10 @@ main .glass {
   .profile-pic {
     max-width: 150px;
     border-radius: 24px;
+  }
+
+  .section, .section.contact {
+    padding: 24px 16px;
   }
 
   .wrapper {
