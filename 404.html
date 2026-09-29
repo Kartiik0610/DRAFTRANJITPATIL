@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | Dr. Ranjit A. Patil</title>
+
+  <!-- Global shared CSS -->
+  <link rel="stylesheet" href="CSS/navbar.css?v=4">
+  <link rel="stylesheet" href="CSS/footer.css?v=4">
+
+  <!-- Layout loader -->
+  <script defer src="JS/layout.js"></script>
+
+  <style>
+    /* 404 Page Specific Styles */
+    main {
+      min-height: calc(100vh - 150px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .error-card {
+      background: var(--bg-glass-inner, rgba(255, 255, 255, 0.05));
+      border: 1px solid var(--border-soft, rgba(255, 255, 255, 0.15));
+      border-radius: 36px;
+      padding: 64px 48px;
+      text-align: center;
+      max-width: 600px;
+      width: 100%;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .error-code {
+      font-size: 6rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--gold, #F97316), var(--text-primary, #FFFFFF));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0.9;
+    }
+
+    .error-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--text-primary, #FFFFFF);
+      margin-bottom: 24px;
+    }
+
+    .error-message {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--text-secondary, #b6c0cc);
+      margin-bottom: 40px;
+    }
+
+    .home-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 32px;
+      background: var(--gold, #F97316);
+      color: #FFFFFF !important;
+      font-weight: 600;
+      font-size: 1.05rem;
+      text-decoration: none;
+      border-radius: 999px;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 24px rgba(249, 115, 22, 0.3);
+    }
+
+    .home-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(249, 115, 22, 0.4);
+    }
+
+    html[data-theme="light"] .error-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    }
+
+    html[data-theme="light"] .error-code {
+      background: linear-gradient(135deg, var(--gold, #CA2325), var(--text-primary, #202124));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    html[data-theme="light"] .home-button {
+      background: var(--gold, #CA2325);
+      box-shadow: 0 8px 24px rgba(202, 35, 37, 0.2);
+    }
+
+    html[data-theme="light"] .home-button:hover {
+      box-shadow: 0 12px 32px rgba(202, 35, 37, 0.3);
+    }
+
+    @media (max-width: 600px) {
+      .error-card {
+        padding: 48px 32px;
+      }
+      .error-code {
+        font-size: 4.5rem;
+      }
+      .error-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SHARED NAVBAR -->
+  <div id="header"></div>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="error-card glass">
+      <div class="error-code">404</div>
+      <h1 class="error-title">Page Not Found</h1>
+      <p class="error-message">
+        The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+      </p>
+      <a href="index.html" class="home-button">Return to Homepage</a>
+    </div>
+  </main>
+
+  <!-- SHARED FOOTER -->
+  <div id="footer"></div>
+
+</body>
+</html>
