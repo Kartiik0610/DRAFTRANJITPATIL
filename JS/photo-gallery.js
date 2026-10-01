@@ -73,8 +73,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Images HTML
       let imagesHTML = "";
       if (images.length > 0) {
-        imagesHTML = `<div class="event-gallery">` + 
-          images.map(img => `<img src="${img}" alt="Event Image" loading="lazy" />`).join("") + 
+        imagesHTML = `<div class="event-carousel">` + 
+          images.map((img, idx) => `<img src="${img}" alt="Event Image" class="${idx === 0 ? 'active' : ''}" loading="lazy" />`).join("") + 
           `</div>`;
       }
       
@@ -96,9 +96,28 @@ document.addEventListener("DOMContentLoaded", async () => {
       
       container.appendChild(card);
     });
+
+    // Start carousel cycling
+    startCarousels();
     
   } catch (error) {
     console.error("Failed to fetch events:", error);
     container.innerHTML = "<p>Failed to load events. Please ensure the CSV link (including the GID for Sheet 3) is correct in JS/photo-gallery.js.</p>";
   }
 });
+
+function startCarousels() {
+  const carousels = document.querySelectorAll(".event-carousel");
+  
+  carousels.forEach(carousel => {
+    const images = carousel.querySelectorAll("img");
+    if (images.length <= 1) return; // No need to cycle if only 1 image
+    
+    let currentIndex = 0;
+    setInterval(() => {
+      images[currentIndex].classList.remove("active");
+      currentIndex = (currentIndex + 1) % images.length;
+      images[currentIndex].classList.add("active");
+    }, 3000); // Change image every 3 seconds
+  });
+}

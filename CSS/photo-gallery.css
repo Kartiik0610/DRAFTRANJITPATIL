@@ -119,25 +119,31 @@ html[data-theme="light"] .event-date {
   margin-bottom: 24px;
 }
 
-/* ---------- EVENT GALLERY GRID ---------- */
-.event-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.event-gallery img {
+/* ---------- EVENT CAROUSEL ---------- */
+.event-carousel {
+  position: relative;
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: 350px;
+  margin-bottom: 24px;
   border-radius: 12px;
+  overflow: hidden;
   border: 1px solid var(--glass-border);
-  transition: transform 0.3s ease;
 }
 
-.event-gallery img:hover {
-  transform: scale(1.03);
+.event-carousel img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out, transform 3s ease;
+}
+
+.event-carousel img.active {
+  opacity: 1;
+  transform: scale(1.05);
 }
 
 /* ---------- BUTTONS ---------- */
