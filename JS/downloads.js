@@ -62,6 +62,36 @@ document.addEventListener("DOMContentLoaded", async () => {
       grid.innerHTML = "<p>Failed to load subjects data. Please try again later.</p>";
     }
   }
+
+  // Event delegation for "Download All Notes" buttons
+  grid.addEventListener("click", (e) => {
+    if (e.target.classList.contains("download-all-btn")) {
+      e.preventDefault();
+      const subjectTitle = e.target.getAttribute("data-subject");
+      const subject = subjects.find(s => s.title === subjectTitle);
+      
+      if (subject && subject.items && subject.items.length > 0) {
+        showToast("Starting downloads for " + subjectTitle + "...");
+        let delay = 0;
+        subject.items.forEach((item) => {
+          if (!item.disabled && !item.ss && item.fileId) {
+            setTimeout(() => {
+              const a = document.createElement("a");
+              a.href = item.fileId;
+              a.target = "_blank";
+              a.download = "";
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+            }, delay);
+            delay += 400; // stagger to prevent popup blocks
+          }
+        });
+      } else {
+        showToast("No downloadable notes found for this subject.");
+      }
+    }
+  });
 });
 
 function showToast(msg) {
@@ -124,12 +154,9 @@ function renderSubjects(subjectsData, grid) {
           ${renderSection("Forms / Documents", grouped.form)}
         </ul>
 
-        <a class="download-all"
-           href=""
-           target="_blank"
-           rel="noopener">
+        <button class="download-all download-all-btn" style="border: none; cursor: pointer; font-family: inherit;" data-subject="${subject.title.replace(/"/g, '&quot;')}">
           Download All Notes
-        </a>
+        </button>
       `;
 
       grid.appendChild(card);
