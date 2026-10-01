@@ -1,6 +1,6 @@
 // REPLACE "YOUR_GID_HERE" WITH THE ACTUAL GID OF SHEET 3
 // You can find the gid in your browser's URL bar when viewing Sheet 3 (e.g., #gid=12345678)
-const CSV_URL = "https://docs.google.com/spreadsheets/d/1OPP7gnKAj-a7LimDhUwSYRmn6Rsqe_BuXDEa2143ap8/export?format=csv&gid=YOUR_GID_HERE";
+const CSV_URL = "https://docs.google.com/spreadsheets/d/1OPP7gnKAj-a7LimDhUwSYRmn6Rsqe_BuXDEa2143ap8/export?format=csv&gid=474175050";
 
 function csvToArray(text) {
   let p = "", row = [""], ret = [row], i = 0, r = 0, s = !0, l;
