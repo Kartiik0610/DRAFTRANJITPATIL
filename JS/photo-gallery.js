@@ -42,11 +42,23 @@ document.addEventListener("DOMContentLoaded", async () => {
       const desc = row[2]?.trim();
       const date = row[3]?.trim();
       
+      // Helper to convert Google Drive share links to embeddable image links
+      function getDirectImageUrl(url) {
+        if (!url) return "";
+        if (url.includes("drive.google.com")) {
+          const match = url.match(/[-\w]{25,}/);
+          if (match) {
+            return `https://drive.google.com/uc?export=view&id=${match[0]}`;
+          }
+        }
+        return url;
+      }
+
       // Images 1 to 6 (indexes 4 to 9)
       const images = [];
       for (let i = 4; i <= 9; i++) {
         if (row[i] && row[i].trim() !== "") {
-          images.push(row[i].trim());
+          images.push(getDirectImageUrl(row[i].trim()));
         }
       }
       
