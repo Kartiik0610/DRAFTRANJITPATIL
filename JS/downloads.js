@@ -258,21 +258,14 @@ function createItemHTML(item) {
     `;
   } 
   
-  const view = item.fileId;
-  const dl = view; // Since it's Sharepoint links mostly, downloading via drive.google.com/uc?id won't work unless it's a Drive ID. The user's original logic was combining Sharepoint URLs into Google Drive download URLs which is broken. We'll leave it as original or just use view link.
-  
-  // To keep it strictly matching original download logic:
-  let downloadUrl = view;
-  if (!view.startsWith("http")) {
-      downloadUrl = `https://drive.google.com/uc?export=download&id=${item.fileId}`;
-  }
+  const linkUrl = item.fileId;
 
   return `
     <li class="content-item ${item.type}">
-      <a href="${view}" target="_blank" rel="noopener" class="item-link">
+      <a href="${linkUrl}" target="_blank" rel="noopener" class="item-link">
         ${item.label}
       </a>
-      <a href="${downloadUrl}" class="download-icon" title="Download">⬇️</a>
+      <a href="${linkUrl}" class="download-icon" title="Download" target="_blank" rel="noopener">⬇️</a>
     </li>
   `;
 }
