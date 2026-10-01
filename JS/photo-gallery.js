@@ -48,7 +48,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (url.includes("drive.google.com")) {
           const match = url.match(/[-\w]{25,}/);
           if (match) {
-            return `https://drive.google.com/uc?export=view&id=${match[0]}`;
+            // Using the thumbnail endpoint is much more reliable for embedding Drive images
+            return `https://drive.google.com/thumbnail?id=${match[0]}&sz=w1000`;
           }
         }
         return url;
