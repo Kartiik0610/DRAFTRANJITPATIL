@@ -89,8 +89,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           <h3>${title}</h3>
           ${date ? `<span class="event-date">${date}</span>` : ""}
         </div>
-        ${desc ? `<p class="event-desc">${desc}</p>` : ""}
         ${imagesHTML}
+        ${desc ? `<p class="event-desc">${desc}</p>` : ""}
         ${pdfHTML}
       `;
       
