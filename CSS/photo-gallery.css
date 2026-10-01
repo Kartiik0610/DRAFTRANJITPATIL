@@ -68,13 +68,15 @@
 
 /* ---------- EVENTS CONTAINER ---------- */
 .events-container {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 32px;
 }
 
 /* ---------- EVENT CARD ---------- */
 .event-card {
+  display: flex;
+  flex-direction: column;
   padding: 30px;
   border-radius: 16px;
   background: var(--glass-bg);
@@ -117,17 +119,19 @@ html[data-theme="light"] .event-date {
   line-height: 1.6;
   color: var(--text-primary);
   margin-bottom: 24px;
+  flex-grow: 1; /* Pushes the button to the bottom if desc is short */
 }
 
 /* ---------- EVENT CAROUSEL ---------- */
 .event-carousel {
   position: relative;
   width: 100%;
-  height: 350px;
+  height: 300px;
   margin-bottom: 24px;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--glass-border);
+  background-color: #000; /* Black padding for images */
 }
 
 .event-carousel img {
@@ -136,14 +140,13 @@ html[data-theme="light"] .event-date {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* Shows entire image */
   opacity: 0;
-  transition: opacity 1s ease-in-out, transform 3s ease;
+  transition: opacity 1s ease-in-out;
 }
 
 .event-carousel img.active {
   opacity: 1;
-  transform: scale(1.05);
 }
 
 /* ---------- BUTTONS ---------- */
