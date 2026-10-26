@@ -1,0 +1,6 @@
+*.tmp
+temp_data.csv
+test.js
+.DS_Store
+Thumbs.db
+node_modules/

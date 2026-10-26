@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Dashboard | Virtual Classroom</title>
+  
+  <link rel="stylesheet" href="CSS/navbar.css?v=4" />
+  <link rel="stylesheet" href="CSS/footer.css?v=4" />
+  <link rel="stylesheet" href="CSS/classroom.css?v=6" />
+  
+  <!-- PeerJS for WebRTC P2P communication -->
+  <script defer src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+  <!-- PDF.js for rendering PDFs -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
+  <!-- Fabric.js for drawing on canvas -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+  
+  <script defer src="JS/layout.js"></script>
+  <script defer src="JS/teacher.js"></script>
+</head>
+<body>
+
+  <div id="header"></div>
+
+  <main>
+    <div class="wrapper room-wrapper">
+      <div class="room-layout">
+        
+        <!-- Left Panel: Presentation & Tools -->
+        <div class="presentation-panel glass">
+          <div class="toolbar">
+            <div style="display:flex; flex-direction:column; gap: 0.25rem;">
+              <input type="file" id="pdfUpload" accept=".pdf,.ppt,.pptx" />
+              <small style="color:#aaa;">* Upload a PDF or PPT/PPTX file</small>
+            </div>
+            <button id="prevPage" class="btn-small" disabled>Prev</button>
+            <span id="pageInfo">Page: 0/0</span>
+            <button id="nextPage" class="btn-small" disabled>Next</button>
+            
+            <div class="drawing-tools">
+              <button id="toolPen" class="btn-small active">Pen</button>
+              <button id="toolHighlighter" class="btn-small">Highlighter</button>
+              <button id="toolEraser" class="btn-small">Eraser</button>
+              <button id="clearBoard" class="btn-small">Clear All</button>
+            </div>
+          </div>
+          
+          <div class="canvas-container">
+            <!-- PDF background canvas -->
+            <canvas id="pdfCanvas"></canvas>
+            <!-- Fabric drawing canvas over PDF -->
+            <canvas id="drawingCanvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Right Panel: Students & Quiz -->
+        <div class="sidebar-panel glass">
+          <h3>Room Info</h3>
+          <p>Status: <span id="connStatus">Initializing...</span></p>
+          <hr>
+          
+          <h3>Attendance (<span id="studentCount">0</span>)</h3>
+          <ul id="studentList" class="student-list"></ul>
+          <button id="exportAttendance" class="btn-small">Export Attendance</button>
+          <hr>
+
+          <h3>Quiz Panel</h3>
+          <textarea id="quizQuestion" placeholder="Enter quiz question here..." rows="3"></textarea>
+          <button id="startQuiz" class="btn">Start Quiz</button>
+          <button id="endQuiz" class="btn" style="display:none; background: #dc3545;">End Quiz</button>
+          
+          <div id="quizResponses" style="margin-top: 1rem; max-height: 200px; overflow-y: auto;">
+            <!-- Responses will populate here -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Notification overlay -->
+  <div id="notificationArea" class="notification-area"></div>
+
+  <div id="footer"></div>
+
+</body>
+</html>

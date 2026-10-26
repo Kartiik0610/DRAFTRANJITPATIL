@@ -46,11 +46,11 @@
 /* ---------- SECTION BASE ---------- */
 .section {
   padding: 36px 42px;
-  margin-bottom: 48px;
+  margin: 0;
 }
 
 .section:last-of-type {
-  margin-bottom: 24px; /* tighten before footer */
+  margin: 0;
 }
 
 .section h2 {

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Quiz & Assessment Portal | Dr. Ranjit A. Patil</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Online Quiz and Assessment Portal of Dr. Ranjit A. Patil, SVKM's Dwarkadas J. Sanghvi College of Engineering (DJSCE).">
+  <meta name="author" content="Dr. Ranjit A. Patil">
+
+  <!-- Existing global CSS -->
+  <link rel="stylesheet" href="CSS/navbar.css?v=4" />
+  <link rel="stylesheet" href="CSS/footer.css?v=4" />
+  <link rel="stylesheet" href="CSS/profile.css?v=4" />
+
+  <!-- Quiz specific CSS -->
+  <link rel="stylesheet" href="CSS/quiz.css?v=2" />
+
+  <!-- Layout loader & Quiz logic -->
+  <script defer src="JS/layout.js?v=18"></script>
+  <script defer src="JS/quiz.js?v=2"></script>
+</head>
+
+<body>
+
+  <!-- SHARED NAVBAR -->
+  <div id="header"></div>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="wrapper quiz-wrapper">
+
+      <!-- =========================================================
+           1. BRIEFING & REGISTRATION CARD (SkyySkill Inspired)
+      ========================================================= -->
+      <div id="quizBriefingContainer">
+        <section class="quiz-card">
+          <div class="quiz-card-stripe"></div>
+          
+          <div class="quiz-card-body">
+            
+            <!-- Badges Row -->
+            <div class="quiz-badge-row">
+              <span class="quiz-badge badge-live" id="badgeLiveStatus">
+                <span class="pulse-dot"></span> Live Assessment
+              </span>
+              <span class="quiz-badge badge-time" id="badgeDuration">Valid For: 10 Minutes</span>
+              <span class="quiz-badge badge-sem" id="badgeSemester">Semester VII</span>
+              <span class="quiz-badge badge-date" id="badgeDate">27/10/2026</span>
+              <span class="quiz-badge badge-start" id="badgeStartTime">Start Time: 23:30</span>
+            </div>
+
+            <!-- Title & Subtitle -->
+            <h1 class="quiz-title" id="quizTitle">EVSD TT3</h1>
+            <p class="quiz-subtitle" id="quizSubtitle">
+              Official online assessment for Semester VII (10 Minutes).
+            </p>
+
+            <!-- Guidelines Box (Short & Concise) -->
+            <div class="quiz-instructions-box">
+              <div class="quiz-instructions-title">
+                <span>📋</span> Guidelines
+              </div>
+              <ul class="quiz-instructions-list">
+                <li>
+                  <span class="bullet-icon">⏱️</span>
+                  <span id="instructionsDurationNote"><strong>10-Min Timer:</strong> Auto-submits when countdown expires.</span>
+                </li>
+                <li>
+                  <span class="bullet-icon">📊</span>
+                  <span><strong>Live Sync:</strong> Questions loaded directly from Google Sheet.</span>
+                </li>
+                <li>
+                  <span class="bullet-icon">🎯</span>
+                  <span><strong>Auto Grading:</strong> Marks recorded upon submission.</span>
+                </li>
+                <li>
+                  <span class="bullet-icon">🛡️</span>
+                  <span><strong>Anti-Cheat:</strong> Tab switches are strictly monitored.</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Schedule Lock Notice (Managed Dynamically by JS) -->
+            <div id="scheduleLockNotice" class="quiz-schedule-lock-notice" style="display: none;">
+              <div class="quiz-schedule-lock-icon">🔒</div>
+              <div id="scheduleLockText">
+                This assessment is scheduled for <strong>27/10/2026</strong> at <strong>23:30</strong>. The test portal will unlock automatically at the start time.
+              </div>
+            </div>
+
+            <!-- Candidate Details Form -->
+            <form id="quizRegForm" class="quiz-form">
+              <div class="quiz-form-row">
+                <div class="quiz-field-group">
+                  <label for="studentName">Candidate Full Name <span class="req-star">*</span></label>
+                  <input type="text" id="studentName" placeholder="e.g. Rahul Sharma" required />
+                  <span class="field-error-msg" id="studentNameError"></span>
+                </div>
+
+                <div class="quiz-field-group">
+                  <label for="studentSap">Roll No / SAP ID <span class="req-star">*</span></label>
+                  <input type="text" id="studentSap" placeholder="e.g. 60001234567 or Roll No" required />
+                  <span class="field-error-msg" id="studentSapError"></span>
+                </div>
+              </div>
+
+              <div class="quiz-field-group">
+                <label for="studentEmail">Student Email ID <span class="req-star">*</span></label>
+                <input type="email" id="studentEmail" placeholder="e.g. student@djsce.edu.in" required />
+                <span class="field-error-msg" id="studentEmailError"></span>
+              </div>
+
+              <div style="display: flex; align-items: flex-start; gap: 10px; margin: 6px 0;">
+                <input type="checkbox" id="agreementCheck" style="margin-top: 4px; width: 18px; height: 18px; accent-color: var(--quiz-primary); cursor: pointer;" required />
+                <label for="agreementCheck" style="font-size: 0.88rem; color: #94a3b8; cursor: pointer;">
+                  I confirm that my details are accurate and agree to complete this assessment within the specified time limit.
+                </label>
+              </div>
+
+              <button type="submit" class="quiz-btn-primary" id="startAssessmentBtn">
+                <span>Start Assessment</span>
+                <span>⏱️</span>
+              </button>
+            </form>
+
+          </div>
+        </section>
+      </div>
+
+      <!-- =========================================================
+           2. NATIVE ASSESSMENT VIEW (NO IFRAME!)
+      ========================================================= -->
+      <div id="examView">
+
+        <!-- Sticky Assessment Header with Live Countdown -->
+        <div class="exam-sticky-bar">
+          <div class="exam-bar-content">
+            
+            <div class="exam-student-meta">
+              <div class="exam-student-title">
+                <span id="examBarTitle">EVSD TT3</span>
+              </div>
+              <div class="exam-student-sub" id="examBarStudentInfo">
+                Candidate: Student | SAP: -
+              </div>
+            </div>
+
+            <!-- Central Live Countdown -->
+            <div class="exam-timer-center">
+              <div class="exam-timer-display" id="timerDisplay">15:00</div>
+              <div class="exam-timer-label">Time Remaining</div>
+            </div>
+
+            <!-- Action Buttons & Violations -->
+            <div class="exam-bar-actions">
+              <span class="warning-badge" id="violationBadge" style="display: none;">
+                ⚠️ Violations: 0
+              </span>
+              <button type="submit" form="nativeQuizForm" class="quiz-btn-primary" style="padding: 10px 20px; font-size: 0.95rem;">
+                Submit 🚀
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Dynamic Draining Progress Bar -->
+          <div class="exam-timer-progress-track">
+            <div class="exam-timer-progress-fill" id="timerProgressFill"></div>
+          </div>
+        </div>
+
+        <!-- Questions Form (Rendered Dynamically from Google Sheets) -->
+        <form id="nativeQuizForm">
+          <div id="questionsContainer" class="quiz-questions-list">
+            <!-- Questions injected dynamically by JS/quiz.js -->
+          </div>
+
+          <div class="exam-submit-bar">
+            <div>
+              <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 4px;">Review your answers carefully before submitting.</p>
+              <small style="color: #64748b;">Upon submission, your test will be evaluated instantly and your marks recorded in the official Google Sheet.</small>
+            </div>
+            <button type="submit" class="quiz-btn-primary">
+              <span>Submit & Finalize Marks</span>
+              <span>🚀</span>
+            </button>
+          </div>
+        </form>
+
+      </div>
+
+      <!-- =========================================================
+           3. NATIVE SUCCESS / SCORECARD & RECEIPT VIEW
+      ========================================================= -->
+      <div id="examSuccessView">
+        <section class="quiz-card success-card">
+          <div class="quiz-card-stripe"></div>
+          <div class="quiz-card-body">
+            
+            <div class="success-icon-badge">✓</div>
+            <h2>Assessment Submitted & Marks Recorded!</h2>
+            <p class="success-desc">
+              Your test has been automatically graded and your score has been recorded into the official Google Sheet.
+            </p>
+
+            <!-- Prominent Marks Scorecard -->
+            <div class="score-badge-card" id="scorecardBanner">
+              <div class="score-badge-left">
+                <div class="score-badge-title">Official Score</div>
+                <div class="score-badge-sub" id="scorecardSub">Assessment Completed</div>
+              </div>
+              <div class="score-badge-right">
+                <span class="score-badge-number" id="receiptMarksObtained">0</span>
+                <span class="score-badge-total" id="receiptTotalMarks">/ 10</span>
+                <span class="score-badge-pill" id="receiptPercentagePill">0%</span>
+              </div>
+            </div>
+
+            <!-- Detailed Receipt Table -->
+            <div class="receipt-box" id="receiptContent">
+              <!-- Summary populated by JS -->
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+              <a href="index.html" class="quiz-btn-primary">
+                Return to Home
+              </a>
+            </div>
+
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- SHARED FOOTER -->
+  <div id="footer"></div>
+
+</body>
+</html>

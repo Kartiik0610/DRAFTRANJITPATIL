@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Classroom | Virtual Classroom</title>
+  
+  <link rel="stylesheet" href="CSS/navbar.css?v=4" />
+  <link rel="stylesheet" href="CSS/footer.css?v=4" />
+  <link rel="stylesheet" href="CSS/classroom.css?v=7" />
+  
+  <!-- PeerJS for WebRTC P2P communication -->
+  <script defer src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+  <!-- Fabric.js for drawing on canvas -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+  
+  <script defer src="JS/layout.js"></script>
+  <script defer src="JS/student.js"></script>
+  <script defer src="JS/anti-cheat.js"></script>
+</head>
+<body>
+
+  <div id="header"></div>
+
+  <main>
+    <div class="wrapper room-wrapper">
+      <div class="room-layout">
+        
+        <!-- Left Panel: Presentation View -->
+        <div class="presentation-panel glass">
+          <div class="toolbar" style="justify-content: space-between;">
+            <div>
+              <span id="connStatus">Connecting to Host...</span>
+            </div>
+            <div>
+              <button id="raiseHandBtn" class="btn-small" style="background: #ffc107; color: black; font-weight: bold;">Raise Hand ✋</button>
+            </div>
+          </div>
+          
+          <div class="canvas-container" id="studentCanvasContainer">
+            <!-- Read-only Fabric canvas displaying both PDF bg (if image synced) or just paths over it -->
+            <canvas id="viewCanvas"></canvas>
+            <div id="waitingMsg" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-size:1.5rem; color:#888;">Waiting for Teacher to share presentation...</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Quiz Overlay Modal -->
+  <div id="quizOverlay" class="quiz-overlay">
+    <div class="quiz-modal">
+      <h2 style="color: #ffc107;">Active Quiz</h2>
+      <p id="quizQuestionText" style="margin-top: 1rem; font-size: 1.2rem;"></p>
+      <textarea id="quizAnswer" placeholder="Type your answer here..."></textarea>
+      <br>
+      <button id="submitQuizBtn" class="btn">Submit Answer</button>
+    </div>
+  </div>
+
+  <div id="footer"></div>
+
+</body>
+</html>
