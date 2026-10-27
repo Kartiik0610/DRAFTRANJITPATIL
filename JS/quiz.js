@@ -80,6 +80,9 @@ let isSubmitting = false;
 // Student selected answers { [questionId]: selectedOptionText }
 const userAnswers = {};
 
+// Background 3-second auto-sync timer (active until student starts assessment)
+let briefingSyncInterval = null;
+
 /* =========================================================
    INITIALIZATION
 ========================================================= */
@@ -155,15 +158,15 @@ async function initQuizPortal() {
 
   // 6. Periodic Schedule Checker (unlocks live when start time arrives)
   updateScheduleLockUI();
-  setInterval(updateScheduleLockUI, 5000);
+  setInterval(updateScheduleLockUI, 1000);
 
-  // 7. Manual & Auto-Sync Triggers
-  const manualSyncBtn = document.getElementById("manualSyncBtn");
-  if (manualSyncBtn) {
-    manualSyncBtn.addEventListener("click", () => {
-      loadLiveQuestionsFromSheet(false);
-    });
-  }
+  // 7. Auto-Sync every 3 seconds until student starts assessment
+  if (briefingSyncInterval) clearInterval(briefingSyncInterval);
+  briefingSyncInterval = setInterval(() => {
+    if (!currentCandidate && !isFetchingLiveSheet) {
+      loadLiveQuestionsFromSheet(true);
+    }
+  }, 3000);
 
   // Instant re-fetch whenever user switches back to this tab from Google Sheets
   window.addEventListener("focus", () => {
@@ -178,13 +181,6 @@ async function initQuizPortal() {
     }
   });
 
-  // Background auto-sync every 10s while on briefing screen
-  setInterval(() => {
-    if (!currentCandidate) {
-      loadLiveQuestionsFromSheet(true);
-    }
-  }, 10000);
-
   // 8. Security & Anti-Copy Protection (Quiz Page Only)
   initPageAntiCopy();
 }
@@ -195,17 +191,9 @@ async function initQuizPortal() {
 
 let isFetchingLiveSheet = false;
 
-async function loadLiveQuestionsFromSheet(isSilent = false) {
-  if (isFetchingLiveSheet) return;
+async function loadLiveQuestionsFromSheet(isSilent = true) {
+  if (currentCandidate || isFetchingLiveSheet) return;
   isFetchingLiveSheet = true;
-
-  const syncBtn = document.getElementById("manualSyncBtn");
-  const syncText = document.getElementById("manualSyncText");
-
-  if (!isSilent && syncBtn) {
-    syncBtn.classList.add("is-syncing");
-    if (syncText) syncText.textContent = "Syncing...";
-  }
 
   let updated = false;
 
@@ -232,19 +220,18 @@ async function loadLiveQuestionsFromSheet(isSilent = false) {
           }
         }
 
-        if (parsedQuizzes.length > 0) {
+        if (parsedQuizzes.length > 0 && !currentCandidate) {
           applyParsedQuizzes(parsedQuizzes);
           updated = true;
-          console.log(`🔒 Synced ${availableQuizzes.length} active quiz(zes) live via Apps Script!`);
         }
       }
     } catch (err) {
-      console.warn("Secure Web App fetch failed, falling back to CSV export:", err);
+      // silent fallback
     }
   }
 
   // Strategy 2: Direct Google Sheet CSV Export (if Strategy 1 did not update)
-  if (!updated) {
+  if (!updated && !currentCandidate) {
     try {
       const cacheBusterUrl = `${GOOGLE_SHEET_QUESTIONS_CSV}&t=${Date.now()}`;
       const response = await fetch(cacheBusterUrl, { cache: "no-store" });
@@ -252,36 +239,28 @@ async function loadLiveQuestionsFromSheet(isSilent = false) {
         const csvText = await response.text();
         if (csvText && !csvText.includes("<!DOCTYPE") && !csvText.includes("<html")) {
           const parsedQuizzes = parseQuestionsSheetCSV(csvText);
-          if (parsedQuizzes && parsedQuizzes.length > 0) {
+          if (parsedQuizzes && parsedQuizzes.length > 0 && !currentCandidate) {
             applyParsedQuizzes(parsedQuizzes);
             updated = true;
-            console.log(`Loaded ${availableQuizzes.length} active quiz(zes) from Google Sheet CSV!`);
           }
         }
       }
     } catch (err) {
-      console.warn("Could not fetch live Google Sheet questions, using cached/fallback:", err);
+      // silent fallback
     }
   }
 
   isFetchingLiveSheet = false;
-
-  if (syncBtn) {
-    syncBtn.classList.remove("is-syncing");
-    if (updated) {
-      syncBtn.classList.add("is-synced");
-      if (syncText) syncText.textContent = "Synced!";
-      setTimeout(() => {
-        syncBtn.classList.remove("is-synced");
-        if (syncText) syncText.textContent = "Sync Live";
-      }, 2500);
-    } else {
-      if (syncText) syncText.textContent = "Sync Live";
-    }
-  }
 }
 
 function applyParsedQuizzes(parsedQuizzes) {
+  // Prevent DOM flickering if data from Google Sheets hasn't changed
+  const currentStr = JSON.stringify(availableQuizzes);
+  const newStr = JSON.stringify(parsedQuizzes);
+  if (currentStr === newStr) {
+    return;
+  }
+
   const currentActiveId = activeQuiz ? activeQuiz.id : null;
   availableQuizzes = parsedQuizzes;
   const match = availableQuizzes.find(q => q.id === currentActiveId);
@@ -797,6 +776,12 @@ function handleStartAssessment(e) {
     startTime: Date.now(),
     startedAt: new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })
   };
+
+  // Terminate the 3-second background polling since student has entered assessment
+  if (briefingSyncInterval) {
+    clearInterval(briefingSyncInterval);
+    briefingSyncInterval = null;
+  }
 
   sessionStorage.setItem(CANDIDATE_STORAGE_KEY, JSON.stringify(currentCandidate));
 
