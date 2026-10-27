@@ -300,7 +300,7 @@ function getMarksSheet(ss) {
 function getSheetByGid(ss, gid) {
   var sheets = ss.getSheets();
   for (var i = 0; i < sheets.length; i++) {
-    if (sheets[i].getSheetId() === gid) {
+    if (String(sheets[i].getSheetId()) === String(gid)) {
       return sheets[i];
     }
   }
