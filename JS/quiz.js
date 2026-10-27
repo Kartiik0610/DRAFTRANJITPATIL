@@ -157,7 +157,35 @@ async function initQuizPortal() {
   updateScheduleLockUI();
   setInterval(updateScheduleLockUI, 5000);
 
-  // 7. Security & Anti-Copy Protection (Quiz Page Only)
+  // 7. Manual & Auto-Sync Triggers
+  const manualSyncBtn = document.getElementById("manualSyncBtn");
+  if (manualSyncBtn) {
+    manualSyncBtn.addEventListener("click", () => {
+      loadLiveQuestionsFromSheet(false);
+    });
+  }
+
+  // Instant re-fetch whenever user switches back to this tab from Google Sheets
+  window.addEventListener("focus", () => {
+    if (!currentCandidate) {
+      loadLiveQuestionsFromSheet(true);
+    }
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && !currentCandidate) {
+      loadLiveQuestionsFromSheet(true);
+    }
+  });
+
+  // Background auto-sync every 10s while on briefing screen
+  setInterval(() => {
+    if (!currentCandidate) {
+      loadLiveQuestionsFromSheet(true);
+    }
+  }, 10000);
+
+  // 8. Security & Anti-Copy Protection (Quiz Page Only)
   initPageAntiCopy();
 }
 
@@ -165,12 +193,27 @@ async function initQuizPortal() {
    FETCH & PARSE QUESTIONS FROM GOOGLE SHEET CSV OR WEB APP
 ========================================================= */
 
-async function loadLiveQuestionsFromSheet() {
+let isFetchingLiveSheet = false;
+
+async function loadLiveQuestionsFromSheet(isSilent = false) {
+  if (isFetchingLiveSheet) return;
+  isFetchingLiveSheet = true;
+
+  const syncBtn = document.getElementById("manualSyncBtn");
+  const syncText = document.getElementById("manualSyncText");
+
+  if (!isSilent && syncBtn) {
+    syncBtn.classList.add("is-syncing");
+    if (syncText) syncText.textContent = "Syncing...";
+  }
+
+  let updated = false;
+
   // Strategy 1: Attempt to load from Secure Web App (Works even if sheet is 100% PRIVATE/Restricted!)
   if (GOOGLE_APPS_SCRIPT_MARKS_WEBHOOK_URL) {
     try {
       const secureUrl = `${GOOGLE_APPS_SCRIPT_MARKS_WEBHOOK_URL}?action=getQuestions&t=${Date.now()}`;
-      const response = await fetch(secureUrl);
+      const response = await fetch(secureUrl, { cache: "no-store" });
       if (response.ok) {
         const json = await response.json();
         let parsedQuizzes = [];
@@ -190,48 +233,63 @@ async function loadLiveQuestionsFromSheet() {
         }
 
         if (parsedQuizzes.length > 0) {
-          availableQuizzes = parsedQuizzes;
-          activeQuiz = availableQuizzes[0];
-          localStorage.setItem(QUIZ_CACHE_KEY, JSON.stringify(availableQuizzes));
-          renderQuizTabs(availableQuizzes);
-          renderBriefing(activeQuiz);
-          console.log(`🔒 Loaded ${availableQuizzes.length} active quiz(zes) securely from Private Google Sheet via Apps Script!`);
-          return;
+          applyParsedQuizzes(parsedQuizzes);
+          updated = true;
+          console.log(`🔒 Synced ${availableQuizzes.length} active quiz(zes) live via Apps Script!`);
         }
       }
     } catch (err) {
-      console.warn("Secure Web App fetch failed or not configured, falling back to CSV export:", err);
+      console.warn("Secure Web App fetch failed, falling back to CSV export:", err);
     }
   }
 
-  // Strategy 2: Direct Google Sheet CSV Export
-  try {
-    const cacheBusterUrl = `${GOOGLE_SHEET_QUESTIONS_CSV}&t=${Date.now()}`;
-    const response = await fetch(cacheBusterUrl);
-    if (!response.ok) throw new Error("Could not fetch questions sheet");
-
-    const csvText = await response.text();
-    if (!csvText || csvText.includes("<!DOCTYPE") || csvText.includes("<html")) {
-      throw new Error("Received HTML page instead of CSV data (Google Sheet is likely Private/Restricted).");
+  // Strategy 2: Direct Google Sheet CSV Export (if Strategy 1 did not update)
+  if (!updated) {
+    try {
+      const cacheBusterUrl = `${GOOGLE_SHEET_QUESTIONS_CSV}&t=${Date.now()}`;
+      const response = await fetch(cacheBusterUrl, { cache: "no-store" });
+      if (response.ok) {
+        const csvText = await response.text();
+        if (csvText && !csvText.includes("<!DOCTYPE") && !csvText.includes("<html")) {
+          const parsedQuizzes = parseQuestionsSheetCSV(csvText);
+          if (parsedQuizzes && parsedQuizzes.length > 0) {
+            applyParsedQuizzes(parsedQuizzes);
+            updated = true;
+            console.log(`Loaded ${availableQuizzes.length} active quiz(zes) from Google Sheet CSV!`);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Could not fetch live Google Sheet questions, using cached/fallback:", err);
     }
-
-    const parsedQuizzes = parseQuestionsSheetCSV(csvText);
-
-    if (parsedQuizzes && parsedQuizzes.length > 0) {
-      availableQuizzes = parsedQuizzes;
-      activeQuiz = availableQuizzes[0];
-
-      // Cache fresh data for instant offline/re-visit access
-      localStorage.setItem(QUIZ_CACHE_KEY, JSON.stringify(availableQuizzes));
-
-      // Render Tabs & Briefing
-      renderQuizTabs(availableQuizzes);
-      renderBriefing(activeQuiz);
-      console.log(`Loaded ${availableQuizzes.length} active quiz(zes) from Google Sheet CSV!`);
-    }
-  } catch (err) {
-    console.warn("Could not fetch live Google Sheet questions, using cached/fallback:", err);
   }
+
+  isFetchingLiveSheet = false;
+
+  if (syncBtn) {
+    syncBtn.classList.remove("is-syncing");
+    if (updated) {
+      syncBtn.classList.add("is-synced");
+      if (syncText) syncText.textContent = "Synced!";
+      setTimeout(() => {
+        syncBtn.classList.remove("is-synced");
+        if (syncText) syncText.textContent = "Sync Live";
+      }, 2500);
+    } else {
+      if (syncText) syncText.textContent = "Sync Live";
+    }
+  }
+}
+
+function applyParsedQuizzes(parsedQuizzes) {
+  const currentActiveId = activeQuiz ? activeQuiz.id : null;
+  availableQuizzes = parsedQuizzes;
+  const match = availableQuizzes.find(q => q.id === currentActiveId);
+  activeQuiz = match || availableQuizzes[0];
+
+  localStorage.setItem(QUIZ_CACHE_KEY, JSON.stringify(availableQuizzes));
+  renderQuizTabs(availableQuizzes);
+  renderBriefing(activeQuiz);
 }
 
 /**

@@ -151,12 +151,14 @@ function doGet(e) {
     // Securely serve questions to website without requiring public sheet sharing
     if (action === "getQuestions") {
       var qSheet = getSheetByGid(ss, QUESTIONS_GID) || ss.getSheets()[0];
-      // Use getDisplayValues() to get exact formatted strings as seen on screen (prevents date/time conversion glitches)
-      var data = qSheet.getDataRange().getDisplayValues();
-      var colCount = 0;
-      for (var i = 0; i < data.length; i++) {
-        if (data[i].length > colCount) colCount = data[i].length;
+      var lastRow = qSheet.getLastRow();
+      var lastCol = qSheet.getLastColumn();
+      if (lastRow === 0 || lastCol === 0) {
+        return ContentService.createTextOutput(JSON.stringify({ status: "error", message: "Sheet is empty" })).setMimeType(ContentService.MimeType.JSON);
       }
+      // Read only the populated cells instead of default 1,000 rows (sub-second execution)
+      var data = qSheet.getRange(1, 1, lastRow, lastCol).getDisplayValues();
+      var colCount = lastCol;
 
       var quizzes = [];
 

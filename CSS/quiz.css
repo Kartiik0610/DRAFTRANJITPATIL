@@ -176,6 +176,42 @@ html[data-theme="light"],
   100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
 }
 
+.quiz-badge.badge-sync-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  border-color: rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.quiz-badge.badge-sync-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.quiz-badge.badge-sync-btn .sync-icon {
+  display: inline-block;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quiz-badge.badge-sync-btn.is-syncing .sync-icon {
+  animation: spinSync 0.8s linear infinite;
+}
+
+@keyframes spinSync {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.quiz-badge.badge-sync-btn.is-synced {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
 .quiz-schedule-lock-notice {
   background: rgba(245, 158, 11, 0.12);
   border: 1.5px solid rgba(245, 158, 11, 0.35);
