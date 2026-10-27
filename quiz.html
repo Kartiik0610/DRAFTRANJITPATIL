@@ -41,6 +41,16 @@
           
           <div class="quiz-card-body">
             
+            <!-- Multiple Quizzes Tab Selector -->
+            <div id="quizTabsContainer" class="quiz-tabs-container" style="display: none;">
+              <div class="quiz-tabs-label">
+                <span>📚</span> Available Assessments
+              </div>
+              <div class="quiz-tabs-bar" id="quizTabsBar">
+                <!-- Dynamically populated quiz tabs -->
+              </div>
+            </div>
+
             <!-- Badges Row -->
             <div class="quiz-badge-row">
               <span class="quiz-badge badge-live" id="badgeLiveStatus">
@@ -66,11 +76,7 @@
               <ul class="quiz-instructions-list">
                 <li>
                   <span class="bullet-icon">⏱️</span>
-                  <span id="instructionsDurationNote"><strong>10-Min Timer:</strong> Auto-submits when countdown expires.</span>
-                </li>
-                <li>
-                  <span class="bullet-icon">📊</span>
-                  <span><strong>Live Sync:</strong> Questions loaded directly from Google Sheet.</span>
+                  <span id="instructionsDurationNote"><strong>Time Limit:</strong> 10 Minutes (auto-submits when countdown expires).</span>
                 </li>
                 <li>
                   <span class="bullet-icon">🎯</span>
@@ -78,7 +84,7 @@
                 </li>
                 <li>
                   <span class="bullet-icon">🛡️</span>
-                  <span><strong>Anti-Cheat:</strong> Tab switches are strictly monitored.</span>
+                  <span><strong>Anti-Cheat:</strong> Tab switches or minimizing window will incur a penalty of -0.25 marks per violation (1 violation = -0.25, 2 violations = -0.5, and so on).</span>
                 </li>
               </ul>
             </div>
@@ -91,20 +97,41 @@
               </div>
             </div>
 
-            <!-- Candidate Details Form -->
-            <form id="quizRegForm" class="quiz-form">
-              <div class="quiz-form-row">
-                <div class="quiz-field-group">
-                  <label for="studentName">Candidate Full Name <span class="req-star">*</span></label>
-                  <input type="text" id="studentName" placeholder="e.g. Rahul Sharma" required />
-                  <span class="field-error-msg" id="studentNameError"></span>
-                </div>
+            <!-- Clean Action Box (Launches Candidate Verification Modal) -->
+            <div class="quiz-start-action-box">
+              <button type="button" class="quiz-btn-primary" id="openRegModalBtn">
+                <span>Start Assessment</span>
+                <span>⏱️</span>
+              </button>
+            </div>
 
-                <div class="quiz-field-group">
-                  <label for="studentSap">Roll No / SAP ID <span class="req-star">*</span></label>
-                  <input type="text" id="studentSap" placeholder="e.g. 60001234567 or Roll No" required />
-                  <span class="field-error-msg" id="studentSapError"></span>
-                </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- =========================================================
+           CANDIDATE DETAILS VERIFICATION MODAL
+      ========================================================= -->
+      <div id="quizRegModal" class="quiz-modal-backdrop">
+        <div class="quiz-modal-content">
+          <div class="quiz-modal-header">
+            <div>
+              <div class="quiz-modal-title">
+                <span>📝</span> Candidate Verification
+              </div>
+              <div class="quiz-modal-sub" id="modalAssessmentSubtitle">
+                Enter your details to begin the assessment
+              </div>
+            </div>
+            <button type="button" class="quiz-modal-close-btn" id="closeRegModalBtn" aria-label="Close">&times;</button>
+          </div>
+
+          <form id="quizRegForm" class="quiz-form">
+            <div class="quiz-form-row">
+              <div class="quiz-field-group">
+                <label for="studentName">Candidate Full Name <span class="req-star">*</span></label>
+                <input type="text" id="studentName" placeholder="e.g. Rahul Sharma" required />
+                <span class="field-error-msg" id="studentNameError"></span>
               </div>
 
               <div class="quiz-field-group">
@@ -112,22 +139,38 @@
                 <input type="email" id="studentEmail" placeholder="e.g. student@djsce.edu.in" required />
                 <span class="field-error-msg" id="studentEmailError"></span>
               </div>
+            </div>
 
-              <div style="display: flex; align-items: flex-start; gap: 10px; margin: 6px 0;">
-                <input type="checkbox" id="agreementCheck" style="margin-top: 4px; width: 18px; height: 18px; accent-color: var(--quiz-primary); cursor: pointer;" required />
-                <label for="agreementCheck" style="font-size: 0.88rem; color: #94a3b8; cursor: pointer;">
-                  I confirm that my details are accurate and agree to complete this assessment within the specified time limit.
-                </label>
+            <div class="quiz-form-row">
+              <div class="quiz-field-group">
+                <label for="studentSap">SAP ID (11 Digits) <span class="req-star">*</span></label>
+                <input type="text" id="studentSap" inputmode="numeric" maxlength="11" pattern="\d{11}" placeholder="e.g. 60001234567" required />
+                <span class="field-error-msg" id="studentSapError"></span>
               </div>
 
+              <div class="quiz-field-group">
+                <label for="studentRollNo">Class Roll No <span class="req-star">*</span></label>
+                <input type="text" id="studentRollNo" placeholder="e.g. M001" maxlength="20" required />
+                <span class="field-error-msg" id="studentRollNoError"></span>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: flex-start; gap: 10px; margin: 6px 0;">
+              <input type="checkbox" id="agreementCheck" style="margin-top: 4px; width: 18px; height: 18px; accent-color: var(--quiz-primary); cursor: pointer;" required />
+              <label for="agreementCheck" style="font-size: 0.88rem; color: #94a3b8; cursor: pointer;">
+                I confirm that my details are accurate and agree to begin this timed assessment.
+              </label>
+            </div>
+
+            <div class="quiz-modal-footer">
+              <button type="button" class="quiz-btn-secondary" id="cancelRegModalBtn">Cancel</button>
               <button type="submit" class="quiz-btn-primary" id="startAssessmentBtn">
-                <span>Start Assessment</span>
+                <span>Begin Assessment</span>
                 <span>⏱️</span>
               </button>
-            </form>
-
-          </div>
-        </section>
+            </div>
+          </form>
+        </div>
       </div>
 
       <!-- =========================================================
@@ -239,6 +282,16 @@
 
   <!-- SHARED FOOTER -->
   <div id="footer"></div>
+
+  <!-- BLACKOUT SCREENSHOT & ANTI-CAPTURE OVERLAY (QUIZ ONLY) -->
+  <div id="quizBlackoutOverlay">
+    <div class="quiz-blackout-inner">
+      <div style="font-size: 2.4rem; margin-bottom: 12px;">🛡️</div>
+      <h3>Screen Capture / Focus Switch Prohibited</h3>
+      <p>Screenshots, recording, and leaving this window are strictly monitored. Each violation incurs a -0.25 marks penalty.</p>
+      <button type="button" class="quiz-blackout-btn" id="quizResumeBtn">Return to Assessment</button>
+    </div>
+  </div>
 
 </body>
 </html>

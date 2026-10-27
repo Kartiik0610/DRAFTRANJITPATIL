@@ -3,39 +3,71 @@
    Dynamic Google Sheets Questions & Automated Marks Uploader
 ========================================================= */
 
-// 1. Live Google Sheets Questions Source (First Tab: Questions, Options, Answers)
-const GOOGLE_SHEET_QUESTIONS_CSV = "https://docs.google.com/spreadsheets/d/1j7yKVJlU0Jx_HfoRdPEw9JzLRMk4L9ZqORmkvNQ2g-I/export?format=csv";
+// 1. Live Google Sheets Questions Source (First Tab: GID 0)
+const GOOGLE_SHEET_QUESTIONS_CSV = "https://docs.google.com/spreadsheets/d/1bv7TGhU2CMfgn5J6-E4nDH7mPYv9_8zIaGjStRNW9SQ/export?format=csv&gid=0";
 
-// 2. Google Apps Script Webhook URL (Target: Marks Tab GID 2126279517)
+// 2. Google Apps Script Webhook URL (Target: Marks Tab GID 1645517105)
 // Deployed Web App URL connected to your Google Sheet:
-const GOOGLE_APPS_SCRIPT_MARKS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3JgFvyoYCIxYEDtRBUzTsVbqFUBd8E1zmiJq6vqo4QU03ZnQfGcIK7PZR_S_MLturwg/exec";
+const GOOGLE_APPS_SCRIPT_MARKS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby8Pe-NCulvEwKUYvEL4QmQmFMVOA7xx9m0xylnRoalZ2cGi4-uW_oKDWZ56Z8Ukv7i/exec";
 
-const QUIZ_CACHE_KEY = "evsd_live_quiz_cache_v2";
+const QUIZ_CACHE_KEY = "evsd_live_quiz_cache_v4";
 const CANDIDATE_STORAGE_KEY = "evsd_active_candidate_v2";
 const SUBMISSIONS_STORAGE_KEY = "evsd_saved_submissions_v2";
 
-// Default Quiz Schema (Matches the live spreadsheet content as fallback)
-let activeQuiz = {
-  subject: "Testing",
-  semester: "VII",
-  durationMinutes: 10,
-  liveDate: "26/10/2026",
-  startTime: "23:30",
-  testDate: "26/10/2026",
-  totalQuestions: 10,
-  questions: [
-    { id: 1, text: "Question 1", options: ["A", "B", "C", "D"], correctOption: "A" },
-    { id: 2, text: "Question 2", options: ["A", "B", "C", "D"], correctOption: "B" },
-    { id: 3, text: "Question 3", options: ["A", "B", "C", "D"], correctOption: "C" },
-    { id: 4, text: "Question 4", options: ["A", "B", "C", "D"], correctOption: "D" },
-    { id: 5, text: "Question 5", options: ["A", "B", "C", "D"], correctOption: "D" },
-    { id: 6, text: "Question 6", options: ["A", "B", "C", "D"], correctOption: "A" },
-    { id: 7, text: "Question 7", options: ["A", "B", "C", "D"], correctOption: "A" },
-    { id: 8, text: "Question 8", options: ["A", "B", "C", "D"], correctOption: "C" },
-    { id: 9, text: "Question 9", options: ["A", "B", "C", "D"], correctOption: "D" },
-    { id: 10, text: "Question 10", options: ["A", "B", "C", "D"], correctOption: "B" }
-  ]
-};
+// Default Question Bank (Exact questions from your live spreadsheet)
+const defaultEVSDQuestions = [
+  { id: 1, text: "What is the primary function of the Battery Management System (BMS)?", options: ["To convert AC power to DC power", "To monitor cell voltage, temperature, and state of charge", "To regulate the transmission speed", "To manage the regenerative braking system"], correctOption: "B" },
+  { id: 2, text: "In EV powertrain, which voltage level is typically considered high-voltage?", options: ["Up to 12V AC or DC", "Up to 30V AC or 60V DC", "Up to 110V AC or 220V DC", "Up to 230V AC or 400V DC"], correctOption: "B" },
+  { id: 3, text: "Which dangerous condition occurs when a lithium-ion cell exceeds its safe operating temperature?", options: ["Voltage runaway", "Electrolyte saturation", "Thermal runaway", "Inductive collapse"], correctOption: "C" },
+  { id: 4, text: "What is the primary purpose of an on-board charger (OBC) in an EV?", options: ["To convert external AC power to DC power to charge the high-voltage battery", "To step up DC battery voltage for the electric motor", "To convert regenerative energy to heat", "To cool the high-voltage battery pack"], correctOption: "A" },
+  { id: 5, text: "When servicing a high-voltage EV battery pack, which PPE rating is minimum required for insulated gloves?", options: ["Heavy-duty rubber gloves", "Class 0 (1000V rated) insulated gloves", "Disposable latex gloves", "Cut-resistant Kevlar gloves"], correctOption: "B" },
+  { id: 6, text: "What is the role of the Manual Service Disconnect (MSD) in an electric vehicle?", options: ["To continuously regulate inverter voltage", "To isolate the high-voltage battery pack during maintenance", "To disconnect the 12V auxiliary battery", "To switch the inverter into regenerative mode"], correctOption: "B" },
+  { id: 7, text: "In EV system design, what does the creep mode do?", options: ["It applies physical brakes when the vehicle stops", "It slowly moves the vehicle forward when the brake pedal is released, mimicking an automatic transmission", "It dynamically lowers suspension at high speeds", "It completely eliminates battery drain at idle"], correctOption: "B" },
+  { id: 8, text: "What is the function of a pyro-fuse in an EV high-voltage safety system?", options: ["To act as a slow-blow thermal protection device", "To rapidly and irreversibly sever the high-voltage circuit using an explosive squib during a crash", "To ignite a controlled discharge resistor", "To automatically reset after an overcurrent event"], correctOption: "B" },
+  { id: 9, text: "Which motor type is most commonly used in modern electric vehicles due to high power density and efficiency?", options: ["DC Series Wound Motor", "Single-Phase Induction Motor", "Permanent Magnet Synchronous Motor (PMSM)", "Stepper Motor"], correctOption: "C" },
+  { id: 10, text: "What is the standard ISO high-voltage cabling color code in electric vehicles?", options: ["Bright Orange", "Matte Black", "Dark Blue", "Signal Green"], correctOption: "A" }
+];
+
+// Default Quizzes matching your live Google Spreadsheet (Quiz 4 with Subject 'NONE' is automatically excluded)
+const defaultQuizzes = [
+  {
+    id: "quiz_1",
+    subject: "Electric Vehicle System Design And Safety (DJS23MH1451)",
+    semester: "VII",
+    durationMinutes: 10,
+    liveDate: "27/10/2026",
+    startTime: "11:30",
+    endTime: "20:30",
+    totalQuestions: defaultEVSDQuestions.length,
+    questions: defaultEVSDQuestions
+  },
+  {
+    id: "quiz_2",
+    subject: "Test 2",
+    semester: "VI",
+    durationMinutes: 15,
+    liveDate: "29/10/2026",
+    startTime: "11:30",
+    endTime: "20:30",
+    totalQuestions: defaultEVSDQuestions.length,
+    questions: defaultEVSDQuestions
+  },
+  {
+    id: "quiz_3",
+    subject: "Test 3",
+    semester: "VI",
+    durationMinutes: 15,
+    liveDate: "29/10/2026",
+    startTime: "11:30",
+    endTime: "20:30",
+    totalQuestions: defaultEVSDQuestions.length,
+    questions: defaultEVSDQuestions
+  }
+];
+
+// Active State
+let availableQuizzes = [...defaultQuizzes];
+let activeQuiz = availableQuizzes[0];
 
 let currentCandidate = null;
 let timerInterval = null;
@@ -57,68 +89,141 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function initQuizPortal() {
-  // 1. Immediately load cached questions if available
+  // 1. Immediately render initial active quizzes and tabs
   const cachedData = localStorage.getItem(QUIZ_CACHE_KEY);
   if (cachedData) {
     try {
       const parsed = JSON.parse(cachedData);
-      if (parsed && parsed.questions && parsed.questions.length > 0) {
-        activeQuiz = parsed;
-        renderBriefing(activeQuiz);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const filtered = parsed.filter(q => q.subject && q.subject.trim().toLowerCase() !== "none");
+        if (filtered.length > 0) {
+          availableQuizzes = filtered;
+          activeQuiz = availableQuizzes[0];
+        }
       }
     } catch (e) {
       console.warn("Cached quiz parse error", e);
     }
-  } else {
-    renderBriefing(activeQuiz);
   }
+
+  // Render Tabs & Active Briefing View
+  renderQuizTabs(availableQuizzes);
+  renderBriefing(activeQuiz);
 
   // 2. Fetch fresh questions directly from Google Sheets
   await loadLiveQuestionsFromSheet();
 
-  // 3. Bind Registration Form
+  // 3. Bind Modal Open & Close Triggers
+  const openModalBtn = document.getElementById("openRegModalBtn");
+  if (openModalBtn) {
+    openModalBtn.addEventListener("click", openRegistrationModal);
+  }
+
+  const closeModalBtn = document.getElementById("closeRegModalBtn");
+  const cancelModalBtn = document.getElementById("cancelRegModalBtn");
+  if (closeModalBtn) closeModalBtn.addEventListener("click", closeRegistrationModal);
+  if (cancelModalBtn) cancelModalBtn.addEventListener("click", closeRegistrationModal);
+
+  const modalBackdrop = document.getElementById("quizRegModal");
+  if (modalBackdrop) {
+    modalBackdrop.addEventListener("click", (e) => {
+      if (e.target === modalBackdrop) {
+        closeRegistrationModal();
+      }
+    });
+  }
+
+  // 4. Bind Registration Form & Input Restrictions
   const regForm = document.getElementById("quizRegForm");
   if (regForm) {
     regForm.addEventListener("submit", handleStartAssessment);
   }
 
-  // 4. Bind Assessment Submit Form
+  // Strictly enforce 11-digit numeric input on SAP ID field
+  const sapInputEl = document.getElementById("studentSap");
+  if (sapInputEl) {
+    sapInputEl.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(/\D/g, "").slice(0, 11);
+    });
+  }
+
+  // 5. Bind Assessment Submit Form
   const questionsForm = document.getElementById("nativeQuizForm");
   if (questionsForm) {
     questionsForm.addEventListener("submit", handleManualSubmit);
   }
 
-  // 5. Periodic Schedule Checker (unlocks live when start time arrives)
+  // 6. Periodic Schedule Checker (unlocks live when start time arrives)
   updateScheduleLockUI();
   setInterval(updateScheduleLockUI, 5000);
+
+  // 7. Security & Anti-Copy Protection (Quiz Page Only)
+  initPageAntiCopy();
 }
 
 /* =========================================================
-   FETCH & PARSE QUESTIONS FROM GOOGLE SHEET CSV
+   FETCH & PARSE QUESTIONS FROM GOOGLE SHEET CSV OR WEB APP
 ========================================================= */
 
 async function loadLiveQuestionsFromSheet() {
+  // Strategy 1: Attempt to load from Secure Web App (Works even if sheet is 100% PRIVATE/Restricted!)
+  if (GOOGLE_APPS_SCRIPT_MARKS_WEBHOOK_URL) {
+    try {
+      const secureUrl = `${GOOGLE_APPS_SCRIPT_MARKS_WEBHOOK_URL}?action=getQuestions&t=${Date.now()}`;
+      const response = await fetch(secureUrl);
+      if (response.ok) {
+        const json = await response.json();
+        let parsedQuizzes = [];
+
+        if (json && json.status === "success") {
+          if (Array.isArray(json.quizzes) && json.quizzes.length > 0) {
+            parsedQuizzes = json.quizzes.filter(q => q.subject && q.subject.trim().toLowerCase() !== "none");
+          } else if (Array.isArray(json.questions) && json.questions.length > 0) {
+            if (json.subject && json.subject.trim().toLowerCase() !== "none") {
+              parsedQuizzes = [{
+                id: "quiz_1",
+                ...json,
+                totalQuestions: json.questions.length
+              }];
+            }
+          }
+        }
+
+        if (parsedQuizzes.length > 0) {
+          availableQuizzes = parsedQuizzes;
+          activeQuiz = availableQuizzes[0];
+          localStorage.setItem(QUIZ_CACHE_KEY, JSON.stringify(availableQuizzes));
+          renderQuizTabs(availableQuizzes);
+          renderBriefing(activeQuiz);
+          console.log(`🔒 Loaded ${availableQuizzes.length} active quiz(zes) securely from Private Google Sheet via Apps Script!`);
+          return;
+        }
+      }
+    } catch (err) {
+      console.warn("Secure Web App fetch failed or not configured, falling back to CSV export:", err);
+    }
+  }
+
+  // Strategy 2: Direct Google Sheet CSV Export
   try {
     const cacheBusterUrl = `${GOOGLE_SHEET_QUESTIONS_CSV}&t=${Date.now()}`;
     const response = await fetch(cacheBusterUrl);
     if (!response.ok) throw new Error("Could not fetch questions sheet");
 
     const csvText = await response.text();
-    const parsedData = parseQuestionsSheetCSV(csvText);
+    const parsedQuizzes = parseQuestionsSheetCSV(csvText);
 
-    if (parsedData && parsedData.questions && parsedData.questions.length > 0) {
-      activeQuiz = {
-        ...activeQuiz,
-        ...parsedData,
-        totalQuestions: parsedData.questions.length
-      };
+    if (parsedQuizzes && parsedQuizzes.length > 0) {
+      availableQuizzes = parsedQuizzes;
+      activeQuiz = availableQuizzes[0];
 
       // Cache fresh data for instant offline/re-visit access
-      localStorage.setItem(QUIZ_CACHE_KEY, JSON.stringify(activeQuiz));
+      localStorage.setItem(QUIZ_CACHE_KEY, JSON.stringify(availableQuizzes));
 
-      // Update Briefing metadata
+      // Render Tabs & Briefing
+      renderQuizTabs(availableQuizzes);
       renderBriefing(activeQuiz);
-      console.log(`Loaded ${activeQuiz.questions.length} questions from Google Sheet for ${activeQuiz.subject}!`);
+      console.log(`Loaded ${availableQuizzes.length} active quiz(zes) from Google Sheet CSV!`);
     }
   } catch (err) {
     console.warn("Could not fetch live Google Sheet questions, using cached/fallback:", err);
@@ -145,93 +250,190 @@ function csvToArray(text) {
 }
 
 /**
- * Parses the user's specific Google Sheet structure:
- * Row 1: Subject : EVSD
- * Row 2: Semester : VII
- * Row 3: Time : 15 Minutes
- * Row 4: (empty)
- * Row 5: Question ,Option 1,Option 2,Option 3,Option 4,Correct Option
- * Row 6+: Question items
+ * Multi-Quiz Parser:
+ * Dynamically scans the entire spreadsheet for side-by-side quiz blocks.
+ * Whenever a column has "Subject" in the top rows, it parses that quiz block.
+ * If Subject is "NONE" or "none", it is completely excluded!
  */
 function parseQuestionsSheetCSV(csvText) {
   const rows = csvToArray(csvText.trim());
   if (!rows || rows.length === 0) return null;
 
-  let subject = "Testing";
-  let semester = "VII";
-  let durationMinutes = 10;
-  let liveDate = "26/10/2026";
-  let startTime = "23:30";
-  const questions = [];
+  const colCount = Math.max(...rows.map(r => r.length));
+  const quizzes = [];
 
-  let headerRowIndex = -1;
-
-  // Scan metadata header lines
-  for (let i = 0; i < Math.min(rows.length, 12); i++) {
-    const row = rows[i];
-    if (!row || row.length === 0) continue;
-    const firstCell = (row[0] || "").trim().toLowerCase();
-
-    if (firstCell.startsWith("subject")) {
-      const val = row[0].includes(":") ? row[0].substring(row[0].indexOf(":") + 1).trim() : (row[1] || "").trim();
-      if (val) subject = val;
-    } else if (firstCell.startsWith("semester") || firstCell.startsWith("sem")) {
-      const val = row[0].includes(":") ? row[0].substring(row[0].indexOf(":") + 1).trim() : (row[1] || "").trim();
-      if (val) semester = val;
-    } else if (firstCell.startsWith("time") || firstCell.startsWith("duration")) {
-      const numMatch = (row[0] + " " + (row[1] || "")).match(/(\d+)/);
-      if (numMatch) {
-        durationMinutes = parseInt(numMatch[1], 10);
+  for (let c = 0; c < colCount; c++) {
+    // Check if column c defines a quiz with "subject" in the top 6 rows
+    let subjectRow = -1;
+    for (let r = 0; r < Math.min(rows.length, 6); r++) {
+      const cell = String(rows[r][c] || "").trim().toLowerCase();
+      if (cell.startsWith("subject")) {
+        subjectRow = r;
+        break;
       }
-    } else if (firstCell.startsWith("live on date") || firstCell.startsWith("date")) {
-      const val = row[0].includes(":") ? row[0].substring(row[0].indexOf(":") + 1).trim() : (row[1] || "").trim();
-      if (val) liveDate = val;
-    } else if (firstCell.startsWith("start time") || firstCell.startsWith("start")) {
-      const val = row[0].includes(":") ? row[0].substring(row[0].indexOf(":") + 1).trim() : (row[1] || "").trim();
-      if (val) startTime = val;
-    } else if (firstCell.includes("question") && (row[1] || "").toLowerCase().includes("option")) {
-      headerRowIndex = i;
-      break;
     }
-  }
+    if (subjectRow === -1) continue;
 
-  if (headerRowIndex === -1) {
-    headerRowIndex = rows.findIndex(r => r[0] && r[0].toLowerCase().includes("question"));
-  }
+    const cellVal = String(rows[subjectRow][c] || "");
+    let subject = cellVal.includes(":") ? cellVal.split(":")[1].trim() : String(rows[subjectRow][c + 1] || "").trim();
 
-  const startIdx = headerRowIndex >= 0 ? headerRowIndex + 1 : 4;
+    // Completely ignore and skip if subject is empty, "none", or "NONE"
+    if (!subject || subject.toLowerCase() === "none") {
+      continue;
+    }
 
-  for (let r = startIdx; r < rows.length; r++) {
-    const row = rows[r];
-    if (!row || row.length < 2) continue;
+    let semester = "VII";
+    let durationMinutes = 10;
+    let liveDate = "";
+    let startTime = "";
+    let endTime = "";
 
-    const qText = (row[0] || "").trim();
-    if (!qText) continue;
+    // Scan metadata header lines for this specific quiz block
+    for (let r = 0; r < Math.min(rows.length, 12); r++) {
+      const label = String(rows[r][c] || "").trim().toLowerCase();
+      const val = label.includes(":") ? String(rows[r][c]).split(":")[1].trim() : String(rows[r][c + 1] || "").trim();
 
-    const opt1 = (row[1] || "").trim();
-    const opt2 = (row[2] || "").trim();
-    const opt3 = (row[3] || "").trim();
-    const opt4 = (row[4] || "").trim();
-    const correctOpt = (row[5] || "").trim();
+      if (label.startsWith("semester") || label.startsWith("sem")) {
+        if (val) semester = val;
+      } else if (label.startsWith("timer") || (label.startsWith("time") && !label.startsWith("start") && !label.startsWith("end"))) {
+        const m = val.match(/\d+/);
+        if (m) durationMinutes = parseInt(m[0], 10);
+      } else if (label.startsWith("live on date") || label.startsWith("date")) {
+        if (val) liveDate = val;
+      } else if (label.startsWith("start time")) {
+        if (val) startTime = val;
+      } else if (label.startsWith("end time")) {
+        if (val) endTime = val;
+      }
+    }
 
-    const options = [opt1, opt2, opt3, opt4].filter(o => o.length > 0);
+    // Find the question header row
+    let qHeaderRow = -1;
+    for (let r = 0; r < Math.min(rows.length, 15); r++) {
+      const cell = String(rows[r][c] || "").trim().toLowerCase();
+      if (cell.startsWith("question") || cell.startsWith("sr")) {
+        qHeaderRow = r;
+        break;
+      }
+    }
 
-    questions.push({
-      id: questions.length + 1,
-      text: qText,
-      options: options.length > 0 ? options : ["A", "B", "C", "D"],
-      correctOption: correctOpt
+    const questions = [];
+    if (qHeaderRow !== -1) {
+      for (let r = qHeaderRow + 1; r < rows.length; r++) {
+        const qText = String(rows[r][c] || "").trim();
+        // Skip subheaders (e.g. 'A', 'Option') or empty lines
+        if (!qText || qText.toLowerCase() === "question" || qText.toLowerCase() === "a") continue;
+
+        const optA = String(rows[r][c + 1] || "").trim();
+        const optB = String(rows[r][c + 2] || "").trim();
+        const optC = String(rows[r][c + 3] || "").trim();
+        const optD = String(rows[r][c + 4] || "").trim();
+        const correctOpt = String(rows[r][c + 5] || "").trim();
+
+        const options = [optA, optB, optC, optD].filter(Boolean);
+        if (options.length >= 2) {
+          questions.push({
+            id: questions.length + 1,
+            text: qText,
+            options: options,
+            correctOption: correctOpt
+          });
+        }
+      }
+    }
+
+    quizzes.push({
+      id: `quiz_${quizzes.length + 1}`,
+      subject,
+      semester,
+      durationMinutes,
+      liveDate,
+      startTime,
+      endTime,
+      questions,
+      totalQuestions: questions.length
     });
   }
 
-  return {
-    subject,
-    semester,
-    durationMinutes,
-    liveDate,
-    startTime,
-    questions
-  };
+  return quizzes;
+}
+
+/* =========================================================
+   QUIZ TABS RENDERING
+========================================================= */
+
+function renderQuizTabs(quizzes) {
+  const container = document.getElementById("quizTabsContainer");
+  const bar = document.getElementById("quizTabsBar");
+  if (!container || !bar) return;
+
+  if (!quizzes || quizzes.length <= 1) {
+    container.style.display = "none";
+    return;
+  }
+
+  container.style.display = "block";
+  bar.innerHTML = "";
+
+  quizzes.forEach((quiz) => {
+    const schedule = getAssessmentScheduleStatus(quiz);
+    const dotClass = schedule.status === "UPCOMING" ? "dot-upcoming" : schedule.status === "ENDED" ? "dot-ended" : "";
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `quiz-tab-btn ${activeQuiz && quiz.id === activeQuiz.id ? 'is-active' : ''}`;
+    btn.innerHTML = `
+      <span class="quiz-tab-status-dot ${dotClass}"></span>
+      <span class="quiz-tab-title">${escapeHtml(quiz.subject)}</span>
+      <span style="font-size: 0.8rem; opacity: 0.75;">(Sem ${escapeHtml(quiz.semester)})</span>
+    `;
+
+    btn.addEventListener("click", () => {
+      activeQuiz = quiz;
+      bar.querySelectorAll(".quiz-tab-btn").forEach(b => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      renderBriefing(activeQuiz);
+    });
+
+    bar.appendChild(btn);
+  });
+}
+
+/* =========================================================
+   CANDIDATE REGISTRATION MODAL
+========================================================= */
+
+function openRegistrationModal() {
+  const schedule = getAssessmentScheduleStatus(activeQuiz);
+  if (schedule.status === "UPCOMING") {
+    alert(`🔒 This assessment is scheduled for ${activeQuiz.liveDate} at ${activeQuiz.startTime}. Access is locked until the scheduled start time.`);
+    return;
+  }
+  if (schedule.status === "ENDED") {
+    alert(`⛔ This assessment has concluded.`);
+    return;
+  }
+
+  const modal = document.getElementById("quizRegModal");
+  const subTitle = document.getElementById("modalAssessmentSubtitle");
+  if (subTitle && activeQuiz) {
+    subTitle.textContent = `${activeQuiz.subject} (Semester ${activeQuiz.semester || 'VII'}) — ${activeQuiz.durationMinutes || 10} Mins`;
+  }
+
+  if (modal) {
+    modal.classList.add("is-open");
+    const nameInput = document.getElementById("studentName");
+    if (nameInput) {
+      setTimeout(() => nameInput.focus(), 100);
+    }
+  }
+}
+
+function closeRegistrationModal() {
+  const modal = document.getElementById("quizRegModal");
+  if (modal) {
+    modal.classList.remove("is-open");
+  }
 }
 
 /* =========================================================
@@ -239,6 +441,8 @@ function parseQuestionsSheetCSV(csvText) {
 ========================================================= */
 
 function renderBriefing(quiz) {
+  if (!quiz) return;
+
   // Badges
   const semBadge = document.getElementById("badgeSemester");
   const timeBadge = document.getElementById("badgeDuration");
@@ -252,7 +456,8 @@ function renderBriefing(quiz) {
   }
   if (startBadge) {
     if (quiz.startTime) {
-      startBadge.textContent = `Start Time: ${quiz.startTime}`;
+      const timeStr = quiz.endTime ? `${quiz.startTime} - ${quiz.endTime}` : quiz.startTime;
+      startBadge.textContent = `Time Window: ${timeStr}`;
       startBadge.style.display = "inline-flex";
     } else {
       startBadge.style.display = "none";
@@ -270,7 +475,13 @@ function renderBriefing(quiz) {
 
   const durationNoteEl = document.getElementById("instructionsDurationNote");
   if (durationNoteEl) {
-    durationNoteEl.innerHTML = `<strong>${quiz.durationMinutes || 10}-Min Timer:</strong> Auto-submits when countdown expires.`;
+    durationNoteEl.innerHTML = `<strong>Time Limit:</strong> ${quiz.durationMinutes || 10} Minutes (auto-submits when countdown expires).`;
+  }
+
+  // Update Modal Subtitle
+  const subTitle = document.getElementById("modalAssessmentSubtitle");
+  if (subTitle) {
+    subTitle.textContent = `${quiz.subject} (Semester ${quiz.semester || 'VII'}) — ${quiz.durationMinutes || 10} Mins`;
   }
 
   // Update Schedule Lock status
@@ -305,9 +516,15 @@ function getAssessmentScheduleStatus(quiz) {
     return { status: "LIVE", message: "Assessment is active" };
   }
 
-  const durationMs = (quiz.durationMinutes || 10) * 60 * 1000;
-  // Test window stays open during duration + 45-minute grace window
-  const scheduledEnd = new Date(scheduledStart.getTime() + durationMs + (45 * 60 * 1000));
+  let scheduledEnd;
+  if (quiz.endTime && quiz.endTime.includes(":")) {
+    const endParts = quiz.endTime.trim().split(":").map(Number);
+    scheduledEnd = new Date(year, month, day, endParts[0], endParts[1], 0);
+  } else {
+    const durationMs = (quiz.durationMinutes || 10) * 60 * 1000;
+    // Grace window of 45 mins if no end time specified
+    scheduledEnd = new Date(scheduledStart.getTime() + durationMs + (45 * 60 * 1000));
+  }
 
   const now = new Date();
 
@@ -337,9 +554,10 @@ function updateScheduleLockUI() {
   const liveBadge = document.getElementById("badgeLiveStatus");
   const lockNotice = document.getElementById("scheduleLockNotice");
   const lockText = document.getElementById("scheduleLockText");
+  const openModalBtn = document.getElementById("openRegModalBtn");
   const startBtn = document.getElementById("startAssessmentBtn");
 
-  if (!liveBadge || !startBtn) return;
+  if (!liveBadge) return;
 
   if (schedule.status === "UPCOMING") {
     // 1. Badge -> Amber Upcoming
@@ -353,10 +571,16 @@ function updateScheduleLockUI() {
       lockText.innerHTML = `🔒 <strong>Assessment Locked:</strong> Scheduled for <strong>${activeQuiz.liveDate}</strong> at <strong>${activeQuiz.startTime}</strong>. The portal will unlock automatically at the start time.`;
     }
 
-    // 3. Disable Start Button
-    startBtn.disabled = true;
-    startBtn.classList.add("is-locked");
-    startBtn.innerHTML = `<span>🔒 Opens ${activeQuiz.liveDate} at ${activeQuiz.startTime}</span>`;
+    // 3. Disable Action Buttons
+    if (openModalBtn) {
+      openModalBtn.disabled = true;
+      openModalBtn.classList.add("is-locked");
+      openModalBtn.innerHTML = `<span>🔒 Opens ${activeQuiz.liveDate} at ${activeQuiz.startTime}</span>`;
+    }
+    if (startBtn) {
+      startBtn.disabled = true;
+      startBtn.classList.add("is-locked");
+    }
 
   } else if (schedule.status === "ENDED") {
     // 1. Badge -> Red Closed
@@ -367,13 +591,19 @@ function updateScheduleLockUI() {
     if (lockNotice && lockText) {
       lockNotice.style.display = "flex";
       lockNotice.className = "quiz-schedule-lock-notice is-ended";
-      lockText.innerHTML = `⛔ <strong>Assessment Concluded:</strong> This assessment closed on <strong>${activeQuiz.liveDate}</strong>.`;
+      lockText.innerHTML = `⛔ <strong>Assessment Concluded:</strong> This assessment concluded on <strong>${activeQuiz.liveDate}</strong>.`;
     }
 
-    // 3. Disable Start Button
-    startBtn.disabled = true;
-    startBtn.classList.add("is-locked");
-    startBtn.innerHTML = `<span>⛔ Assessment Window Closed</span>`;
+    // 3. Disable Action Buttons
+    if (openModalBtn) {
+      openModalBtn.disabled = true;
+      openModalBtn.classList.add("is-locked");
+      openModalBtn.innerHTML = `<span>⛔ Assessment Window Closed</span>`;
+    }
+    if (startBtn) {
+      startBtn.disabled = true;
+      startBtn.classList.add("is-locked");
+    }
 
   } else {
     // LIVE
@@ -384,9 +614,16 @@ function updateScheduleLockUI() {
       lockNotice.style.display = "none";
     }
 
-    startBtn.disabled = false;
-    startBtn.classList.remove("is-locked");
-    startBtn.innerHTML = `<span>Start Assessment</span> <span>⏱️</span>`;
+    if (openModalBtn) {
+      openModalBtn.disabled = false;
+      openModalBtn.classList.remove("is-locked");
+      openModalBtn.innerHTML = `<span>Start Assessment</span> <span>⏱️</span>`;
+    }
+    if (startBtn) {
+      startBtn.disabled = false;
+      startBtn.classList.remove("is-locked");
+      startBtn.innerHTML = `<span>Begin Assessment</span> <span>⏱️</span>`;
+    }
   }
 }
 
@@ -409,11 +646,13 @@ function handleStartAssessment(e) {
   }
 
   const nameInput = document.getElementById("studentName");
-  const rollInput = document.getElementById("studentSap");
+  const sapInput = document.getElementById("studentSap");
+  const rollInput = document.getElementById("studentRollNo");
   const emailInput = document.getElementById("studentEmail");
   const agreeCheck = document.getElementById("agreementCheck");
 
   const nameVal = nameInput ? nameInput.value.trim() : "";
+  const sapVal = sapInput ? sapInput.value.trim() : "";
   const rollVal = rollInput ? rollInput.value.trim() : "";
   const emailVal = emailInput ? emailInput.value.trim() : "";
 
@@ -421,12 +660,16 @@ function handleStartAssessment(e) {
     showInputError("studentName", "Please enter your full name.");
     return;
   }
-  if (!rollVal) {
-    showInputError("studentSap", "Please enter your Roll No or SAP ID.");
-    return;
-  }
   if (!emailVal || !emailVal.includes("@")) {
     showInputError("studentEmail", "Please enter a valid email address.");
+    return;
+  }
+  if (!sapVal || !/^\d{11}$/.test(sapVal)) {
+    showInputError("studentSap", "Please enter a valid 11-digit numeric SAP ID (e.g. 60001234567).");
+    return;
+  }
+  if (!rollVal) {
+    showInputError("studentRollNo", "Please enter your Class Roll No (e.g. M001).");
     return;
   }
   if (!agreeCheck || !agreeCheck.checked) {
@@ -436,6 +679,7 @@ function handleStartAssessment(e) {
 
   currentCandidate = {
     name: nameVal,
+    sapId: sapVal,
     rollNo: rollVal,
     email: emailVal,
     subject: activeQuiz.subject,
@@ -446,6 +690,7 @@ function handleStartAssessment(e) {
 
   sessionStorage.setItem(CANDIDATE_STORAGE_KEY, JSON.stringify(currentCandidate));
 
+  closeRegistrationModal();
   launchActiveExamView();
 }
 
@@ -482,7 +727,7 @@ function launchActiveExamView() {
   const examStudentInfo = document.getElementById("examBarStudentInfo");
   if (examTitle) examTitle.textContent = `${activeQuiz.subject} (Sem ${activeQuiz.semester})`;
   if (examStudentInfo) {
-    examStudentInfo.textContent = `Candidate: ${currentCandidate.name} | Roll No: ${currentCandidate.rollNo}`;
+    examStudentInfo.textContent = `Candidate: ${currentCandidate.name} | SAP: ${currentCandidate.sapId} | Roll: ${currentCandidate.rollNo}`;
   }
 
   // Render Questions
@@ -683,7 +928,7 @@ async function evaluateAndSubmitMarks(isAutoExpiry = false) {
   const timeSpentStr = `${elapsedMins}m ${elapsedRemSecs}s`;
 
   // 1. Evaluate Marks against correct answers from Google Sheet
-  let marksObtained = 0;
+  let rawMarksObtained = 0;
   const totalQuestions = activeQuiz.questions.length;
   const detailedAnswers = [];
 
@@ -692,7 +937,7 @@ async function evaluateAndSubmitMarks(isAutoExpiry = false) {
     const correct = isAnswerCorrect(q, selectedAnswer);
 
     if (correct) {
-      marksObtained++;
+      rawMarksObtained++;
     }
 
     detailedAnswers.push({
@@ -704,24 +949,31 @@ async function evaluateAndSubmitMarks(isAutoExpiry = false) {
     });
   });
 
-  const percentage = Math.round((marksObtained / (totalQuestions || 1)) * 100);
+  // Calculate Violation Penalty (-0.25 marks per violation)
+  const penalty = Number((tabSwitchCount * 0.25).toFixed(2));
+  const finalMarks = Math.max(0, Number((rawMarksObtained - penalty).toFixed(2)));
+  const percentage = Math.round((finalMarks / (totalQuestions || 1)) * 100);
 
   // Build Payload to push to Google Sheet
   const payload = {
     timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+    sapId: currentCandidate ? currentCandidate.sapId : "",
     rollNo: currentCandidate ? currentCandidate.rollNo : "",
     studentName: currentCandidate ? currentCandidate.name : "",
     email: currentCandidate ? currentCandidate.email : "",
     subject: activeQuiz.subject || "EVSD",
     semester: activeQuiz.semester || "VII",
-    marksObtained: marksObtained,
+    marksObtained: rawMarksObtained,
+    violations: tabSwitchCount,
+    penalty: penalty,
+    marksAfterViolation: finalMarks,
     totalMarks: totalQuestions,
     percentage: `${percentage}%`,
     timeTaken: timeSpentStr,
     autoSubmitted: isAutoExpiry,
-    targetGid: "2126279517",
+    targetGid: "1645517105",
     answers: detailedAnswers,
-    answersSummary: detailedAnswers.map(a => `Q${a.id}: ${a.selected} (${a.isCorrect ? '✓' : '✗'})`).join(" | ")
+    answersSummary: detailedAnswers.map(a => `Q${a.id}: ${a.selected} (${a.isCorrect ? '✓' : '✗'})`).join(" | ") + (tabSwitchCount > 0 ? ` | [Violations: ${tabSwitchCount}, Penalty: -${penalty} marks, Final: ${finalMarks}/${totalQuestions}]` : '')
   };
 
   // 2. Local Backup: Guarantee no marks are lost even if offline
@@ -821,7 +1073,8 @@ function renderScorecardAndReceipt(result) {
   const pillEl = document.getElementById("receiptPercentagePill");
   const subEl = document.getElementById("scorecardSub");
 
-  if (marksObtEl) marksObtEl.textContent = result.marksObtained;
+  const displayMarks = result.marksAfterViolation !== undefined ? result.marksAfterViolation : result.marksObtained;
+  if (marksObtEl) marksObtEl.textContent = displayMarks;
   if (totalMarksEl) totalMarksEl.textContent = `/ ${result.totalMarks}`;
   if (pillEl) pillEl.textContent = result.percentage;
   if (subEl) {
@@ -837,8 +1090,12 @@ function renderScorecardAndReceipt(result) {
         <span class="receipt-value">${escapeHtml(result.studentName)}</span>
       </div>
       <div class="receipt-row">
-        <span class="receipt-label">Roll No / SAP ID:</span>
-        <span class="receipt-value">${escapeHtml(result.rollNo.replace(/^'/, ''))}</span>
+        <span class="receipt-label">SAP ID:</span>
+        <span class="receipt-value">${escapeHtml(String(result.sapId || '').replace(/^'/, ''))}</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Class Roll No:</span>
+        <span class="receipt-value">${escapeHtml(String(result.rollNo || '').replace(/^'/, ''))}</span>
       </div>
       <div class="receipt-row">
         <span class="receipt-label">Email ID:</span>
@@ -849,9 +1106,23 @@ function renderScorecardAndReceipt(result) {
         <span class="receipt-value">${escapeHtml(result.subject)} — Semester ${escapeHtml(result.semester)}</span>
       </div>
       <div class="receipt-row">
-        <span class="receipt-label">Marks Obtained:</span>
+        <span class="receipt-label">Marks Obtained (Raw):</span>
+        <span class="receipt-value" style="font-weight: 600;">
+          ${result.marksObtained} / ${result.totalMarks}
+        </span>
+      </div>
+      ${result.violations > 0 ? `
+      <div class="receipt-row">
+        <span class="receipt-label">Violations Penalty:</span>
+        <span class="receipt-value" style="color: #f87171; font-weight: 600;">
+          -${result.penalty} marks (${result.violations} violation${result.violations > 1 ? 's' : ''} @ -0.25)
+        </span>
+      </div>
+      ` : ''}
+      <div class="receipt-row">
+        <span class="receipt-label">Marks After Violation:</span>
         <span class="receipt-value" style="color: #34d399; font-weight: 700; font-size: 1.1rem;">
-          ${result.marksObtained} / ${result.totalMarks} (${result.percentage})
+          ${displayMarks} / ${result.totalMarks} (${result.percentage})
         </span>
       </div>
       <div class="receipt-row">
@@ -871,11 +1142,93 @@ function renderScorecardAndReceipt(result) {
 }
 
 /* =========================================================
-   ANTI-CHEAT SYSTEM
+   SECURITY & ANTI-CHEAT: NO TEXT COPY & SCREENSHOT BLACKOUT (QUIZ ONLY)
 ========================================================= */
+
+let isExamActiveMode = false;
+
+function initPageAntiCopy() {
+  // 1. Disable Right Click (Context Menu) on Quiz Page
+  document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    showToastNotification("⚠️ Right-click is disabled on assessment portal.", "warning");
+    return false;
+  });
+
+  // 2. Disable Text Copying & Cutting
+  document.addEventListener("copy", (e) => {
+    e.preventDefault();
+    clearClipboard();
+    showToastNotification("⚠️ Copying text is strictly prohibited.", "warning");
+    return false;
+  });
+
+  document.addEventListener("cut", (e) => {
+    e.preventDefault();
+    clearClipboard();
+    return false;
+  });
+
+  // 3. Disable Text Highlighting Dragging (outside input fields)
+  document.addEventListener("selectstart", (e) => {
+    if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  // 4. Global Keyboard Protection & Screenshot Interceptor
+  document.addEventListener("keydown", handleSecurityKeydown);
+  document.addEventListener("keyup", handleSecurityKeyup);
+
+  // 5. Resume from Blackout Button
+  const resumeBtn = document.getElementById("quizResumeBtn");
+  if (resumeBtn) {
+    resumeBtn.addEventListener("click", dismissBlackout);
+  }
+}
+
+function handleSecurityKeydown(e) {
+  // PrintScreen Key -> Immediate Pure Blackout + Clear Clipboard
+  if (e.key === "PrintScreen" || e.keyCode === 44) {
+    triggerBlackout("Print Screen key detected");
+    e.preventDefault();
+    return false;
+  }
+
+  // Ctrl+P / Cmd+P (Print to PDF / Screenshot Print)
+  if ((e.ctrlKey || e.metaKey) && (e.key === "p" || e.key === "P")) {
+    triggerBlackout("Print / PDF capture attempt");
+    e.preventDefault();
+    return false;
+  }
+
+  // Ctrl+C, Ctrl+X, Ctrl+A, Ctrl+U, Ctrl+S outside inputs
+  if ((e.ctrlKey || e.metaKey) && ["c", "x", "a", "u", "s"].includes(e.key.toLowerCase())) {
+    if (document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
+      e.preventDefault();
+      clearClipboard();
+      showToastNotification("⚠️ Shortcut disabled for assessment security.", "warning");
+      return false;
+    }
+  }
+
+  // F12 or Developer Tools Shortcuts
+  if (e.key === "F12" || ((e.ctrlKey || e.metaKey) && e.shiftKey && ["i", "j", "c"].includes(e.key.toLowerCase()))) {
+    e.preventDefault();
+    return false;
+  }
+}
+
+function handleSecurityKeyup(e) {
+  if (e.key === "PrintScreen" || e.keyCode === 44) {
+    triggerBlackout("Print Screen key released");
+  }
+}
 
 function setupAntiCheat() {
   tabSwitchCount = 0;
+  isExamActiveMode = true;
   const violationBadge = document.getElementById("violationBadge");
 
   document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -883,29 +1236,52 @@ function setupAntiCheat() {
 
   function handleVisibilityChange() {
     if (document.hidden && !isSubmitted && !isSubmitting) {
+      triggerBlackout("Tab switched or minimized");
       logViolation("Tab switch or browser minimized");
     }
   }
 
   function handleWindowBlur() {
     if (!document.hidden && !isSubmitted && !isSubmitting) {
+      // Blur fires whenever Windows Snipping Tool (Win+Shift+S) or screenshot app takes focus!
+      triggerBlackout("Window focus lost / Screenshot tool active");
       logViolation("Focus left the exam window");
     }
   }
 
   function logViolation(reason) {
     tabSwitchCount++;
+    const penalty = (tabSwitchCount * 0.25).toFixed(2);
     if (violationBadge) {
       violationBadge.style.display = "inline-flex";
-      violationBadge.textContent = `⚠️ Violations: ${tabSwitchCount}`;
+      violationBadge.textContent = `⚠️ Violations: ${tabSwitchCount} (-${penalty} marks)`;
     }
 
-    if (tabSwitchCount === 1) {
-      showToastNotification(`⚠️ Warning (1/3): ${reason}. Please stay on this tab!`, "warning");
-    } else if (tabSwitchCount >= 3) {
-      showToastNotification(`🚨 Multiple tab switches recorded (${tabSwitchCount})! This will be flagged on your record.`, "danger");
-    }
+    showToastNotification(`⚠️ Violation #${tabSwitchCount}: ${reason}. Penalty: -${penalty} marks (-0.25 per violation).`, "warning");
   }
+}
+
+function triggerBlackout(reason) {
+  const overlay = document.getElementById("quizBlackoutOverlay");
+  if (overlay) {
+    overlay.classList.add("is-active");
+  }
+  clearClipboard();
+}
+
+function dismissBlackout() {
+  const overlay = document.getElementById("quizBlackoutOverlay");
+  if (overlay) {
+    overlay.classList.remove("is-active");
+  }
+}
+
+function clearClipboard() {
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText("").catch(() => {});
+    }
+  } catch (err) {}
 }
 
 /* =========================================================
