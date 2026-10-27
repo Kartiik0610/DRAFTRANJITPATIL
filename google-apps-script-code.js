@@ -151,7 +151,8 @@ function doGet(e) {
     // Securely serve questions to website without requiring public sheet sharing
     if (action === "getQuestions") {
       var qSheet = getSheetByGid(ss, QUESTIONS_GID) || ss.getSheets()[0];
-      var data = qSheet.getDataRange().getValues();
+      // Use getDisplayValues() to get exact formatted strings as seen on screen (prevents date/time conversion glitches)
+      var data = qSheet.getDataRange().getDisplayValues();
       var colCount = 0;
       for (var i = 0; i < data.length; i++) {
         if (data[i].length > colCount) colCount = data[i].length;
@@ -170,8 +171,9 @@ function doGet(e) {
         }
         if (subjectRow === -1) continue;
 
-        var cellVal = String(data[subjectRow][c] || "");
-        var subject = cellVal.indexOf(":") !== -1 ? cellVal.split(":")[1].trim() : String(data[subjectRow][c + 1] || "").trim();
+        var rawSubject = String(data[subjectRow][c] || "");
+        var nextSubject = String(data[subjectRow][c + 1] || "");
+        var subject = extractMetadataValue(rawSubject, nextSubject);
 
         // Completely skip and hide any quiz whose Subject is "NONE" or empty
         if (!subject || subject.toLowerCase() === "none") {
@@ -185,8 +187,10 @@ function doGet(e) {
         var endTime = "";
 
         for (var r = 0; r < Math.min(data.length, 12); r++) {
-          var label = String(data[r][c] || "").trim().toLowerCase();
-          var val = label.indexOf(":") !== -1 ? String(data[r][c]).split(":")[1].trim() : String(data[r][c + 1] || "").trim();
+          var rawCell = String(data[r][c] || "").trim();
+          var nextCell = String(data[r][c + 1] || "").trim();
+          var label = rawCell.toLowerCase();
+          var val = extractMetadataValue(rawCell, nextCell);
 
           if (label.startsWith("semester") || label.startsWith("sem")) {
             if (val) semester = val;
@@ -195,10 +199,10 @@ function doGet(e) {
             if (m) durationMinutes = parseInt(m[0], 10);
           } else if (label.startsWith("live on date") || label.startsWith("date")) {
             if (val) liveDate = val;
-          } else if (label.startsWith("start time")) {
-            if (val) startTime = val;
-          } else if (label.startsWith("end time")) {
-            if (val) endTime = val;
+          } else if (label.startsWith("start time") || label.startsWith("start:") || label.startsWith("start ")) {
+            if (val) startTime = normalizeTimeString(val);
+          } else if (label.startsWith("end time") || label.startsWith("end:") || label.startsWith("end ")) {
+            if (val) endTime = normalizeTimeString(val);
           }
         }
 
@@ -334,4 +338,35 @@ function setupSheetHeaders(sheet) {
   headerRange.setBackground("#0f172a");
   headerRange.setFontColor("#f8fafc");
   headerRange.setHorizontalAlignment("center");
+}
+
+/**
+ * Safely extracts metadata value from either a single cell (e.g. "Start time: 11:30")
+ * or adjacent cells (Col A: "Start time", Col B: "11:30").
+ */
+function extractMetadataValue(cellA, cellB) {
+  var strA = String(cellA || "").trim();
+  var strB = String(cellB || "").trim();
+  var idx = strA.indexOf(":");
+  if (idx !== -1) {
+    var after = strA.substring(idx + 1).trim();
+    if (after) return after;
+  }
+  return strB;
+}
+
+/**
+ * Standardizes time strings (e.g. "11:30", "11:30:00", "11:30 PM", "23:00") into "HH:MM" 24-hr format.
+ */
+function normalizeTimeString(val) {
+  if (!val) return "";
+  var str = String(val).trim();
+  var match = str.match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*([AaPp][Mm])?/);
+  if (!match) return str;
+  var hours = parseInt(match[1], 10);
+  var minutes = match[2];
+  var ampm = match[4] ? match[4].toUpperCase() : null;
+  if (ampm === "PM" && hours < 12) hours += 12;
+  if (ampm === "AM" && hours === 12) hours = 0;
+  return (hours < 10 ? "0" + hours : String(hours)) + ":" + minutes;
 }

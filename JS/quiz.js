@@ -8,9 +8,9 @@ const GOOGLE_SHEET_QUESTIONS_CSV = "https://docs.google.com/spreadsheets/d/1bv7T
 
 // 2. Google Apps Script Webhook URL (Target: Marks Tab GID 1645517105)
 // Deployed Web App URL connected to your Google Sheet:
-const GOOGLE_APPS_SCRIPT_MARKS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby8Pe-NCulvEwKUYvEL4QmQmFMVOA7xx9m0xylnRoalZ2cGi4-uW_oKDWZ56Z8Ukv7i/exec";
+const GOOGLE_APPS_SCRIPT_MARKS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5yfUTtUwxVV_qDAMCkg-C5Z6lPnr0EW9E1kcMitZFqPOXxO_CDb3IYZMNglPZKvhg/exec";
 
-const QUIZ_CACHE_KEY = "evsd_live_quiz_cache_v4";
+const QUIZ_CACHE_KEY = "evsd_live_quiz_cache_v6";
 const CANDIDATE_STORAGE_KEY = "evsd_active_candidate_v2";
 const SUBMISSIONS_STORAGE_KEY = "evsd_saved_submissions_v2";
 
@@ -37,7 +37,7 @@ const defaultQuizzes = [
     durationMinutes: 10,
     liveDate: "27/10/2026",
     startTime: "11:30",
-    endTime: "20:30",
+    endTime: "22:00",
     totalQuestions: defaultEVSDQuestions.length,
     questions: defaultEVSDQuestions
   },
@@ -48,7 +48,7 @@ const defaultQuizzes = [
     durationMinutes: 15,
     liveDate: "29/10/2026",
     startTime: "11:30",
-    endTime: "20:30",
+    endTime: "22:00",
     totalQuestions: defaultEVSDQuestions.length,
     questions: defaultEVSDQuestions
   },
@@ -59,7 +59,7 @@ const defaultQuizzes = [
     durationMinutes: 15,
     liveDate: "29/10/2026",
     startTime: "11:30",
-    endTime: "20:30",
+    endTime: "22:00",
     totalQuestions: defaultEVSDQuestions.length,
     questions: defaultEVSDQuestions
   }
@@ -211,6 +211,10 @@ async function loadLiveQuestionsFromSheet() {
     if (!response.ok) throw new Error("Could not fetch questions sheet");
 
     const csvText = await response.text();
+    if (!csvText || csvText.includes("<!DOCTYPE") || csvText.includes("<html")) {
+      throw new Error("Received HTML page instead of CSV data (Google Sheet is likely Private/Restricted).");
+    }
+
     const parsedQuizzes = parseQuestionsSheetCSV(csvText);
 
     if (parsedQuizzes && parsedQuizzes.length > 0) {
@@ -228,6 +232,37 @@ async function loadLiveQuestionsFromSheet() {
   } catch (err) {
     console.warn("Could not fetch live Google Sheet questions, using cached/fallback:", err);
   }
+}
+
+/**
+ * Safely extracts metadata value from either a single cell (e.g. "Start time: 11:30")
+ * or adjacent cells (Col A: "Start time", Col B: "11:30").
+ */
+function extractMetadataValue(cellA, cellB) {
+  const strA = String(cellA || "").trim();
+  const strB = String(cellB || "").trim();
+  const idx = strA.indexOf(":");
+  if (idx !== -1) {
+    const after = strA.substring(idx + 1).trim();
+    if (after) return after;
+  }
+  return strB;
+}
+
+/**
+ * Standardizes time strings (e.g. "11:30", "11:30:00", "11:30 PM", "23:00") into "HH:MM" 24-hr format.
+ */
+function normalizeTimeString(val) {
+  if (!val) return "";
+  const str = String(val).trim();
+  const match = str.match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*([AaPp][Mm])?/);
+  if (!match) return str;
+  let hours = parseInt(match[1], 10);
+  const minutes = match[2];
+  const ampm = match[4] ? match[4].toUpperCase() : null;
+  if (ampm === "PM" && hours < 12) hours += 12;
+  if (ampm === "AM" && hours === 12) hours = 0;
+  return `${String(hours).padStart(2, "0")}:${minutes}`;
 }
 
 /**
@@ -274,8 +309,9 @@ function parseQuestionsSheetCSV(csvText) {
     }
     if (subjectRow === -1) continue;
 
-    const cellVal = String(rows[subjectRow][c] || "");
-    let subject = cellVal.includes(":") ? cellVal.split(":")[1].trim() : String(rows[subjectRow][c + 1] || "").trim();
+    const rawSubject = String(rows[subjectRow][c] || "");
+    const nextSubject = String(rows[subjectRow][c + 1] || "");
+    let subject = extractMetadataValue(rawSubject, nextSubject);
 
     // Completely ignore and skip if subject is empty, "none", or "NONE"
     if (!subject || subject.toLowerCase() === "none") {
@@ -290,8 +326,10 @@ function parseQuestionsSheetCSV(csvText) {
 
     // Scan metadata header lines for this specific quiz block
     for (let r = 0; r < Math.min(rows.length, 12); r++) {
-      const label = String(rows[r][c] || "").trim().toLowerCase();
-      const val = label.includes(":") ? String(rows[r][c]).split(":")[1].trim() : String(rows[r][c + 1] || "").trim();
+      const rawCell = String(rows[r][c] || "").trim();
+      const nextCell = String(rows[r][c + 1] || "").trim();
+      const label = rawCell.toLowerCase();
+      const val = extractMetadataValue(rawCell, nextCell);
 
       if (label.startsWith("semester") || label.startsWith("sem")) {
         if (val) semester = val;
@@ -300,10 +338,10 @@ function parseQuestionsSheetCSV(csvText) {
         if (m) durationMinutes = parseInt(m[0], 10);
       } else if (label.startsWith("live on date") || label.startsWith("date")) {
         if (val) liveDate = val;
-      } else if (label.startsWith("start time")) {
-        if (val) startTime = val;
-      } else if (label.startsWith("end time")) {
-        if (val) endTime = val;
+      } else if (label.startsWith("start time") || label.startsWith("start:") || label.startsWith("start ")) {
+        if (val) startTime = normalizeTimeString(val);
+      } else if (label.startsWith("end time") || label.startsWith("end:") || label.startsWith("end ")) {
+        if (val) endTime = normalizeTimeString(val);
       }
     }
 
@@ -497,29 +535,43 @@ function getAssessmentScheduleStatus(quiz) {
     return { status: "LIVE", message: "Assessment is active" };
   }
 
-  // Parse DD/MM/YYYY or DD-MM-YYYY
-  const dateParts = quiz.liveDate.trim().split(/[/-]/).map(Number);
-  const timeParts = quiz.startTime.trim().split(":").map(Number);
+  // Parse DD/MM/YYYY, DD-MM-YYYY, or YYYY-MM-DD
+  const cleanDate = String(quiz.liveDate).trim();
+  let day, month, year;
 
-  if (dateParts.length < 3 || timeParts.length < 2) {
+  const dmyMatch = cleanDate.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
+  if (dmyMatch) {
+    day = parseInt(dmyMatch[1], 10);
+    month = parseInt(dmyMatch[2], 10) - 1; // 0-indexed in JS Date
+    year = parseInt(dmyMatch[3], 10);
+  } else {
+    const ymdMatch = cleanDate.match(/^(\d{4})[/-](\d{1,2})[/-](\d{1,2})$/);
+    if (ymdMatch) {
+      year = parseInt(ymdMatch[1], 10);
+      month = parseInt(ymdMatch[2], 10) - 1;
+      day = parseInt(ymdMatch[3], 10);
+    } else {
+      return { status: "LIVE", message: "Assessment is active" };
+    }
+  }
+
+  const startNorm = normalizeTimeString(quiz.startTime);
+  if (!startNorm || !startNorm.includes(":")) {
     return { status: "LIVE", message: "Assessment is active" };
   }
 
-  const day = dateParts[0];
-  const month = dateParts[1] - 1; // 0-indexed in JS Date
-  const year = dateParts[2];
-  const hours = timeParts[0];
-  const mins = timeParts[1];
+  const [sHours, sMins] = startNorm.split(":").map(Number);
+  const scheduledStart = new Date(year, month, day, sHours, sMins, 0);
 
-  const scheduledStart = new Date(year, month, day, hours, mins, 0);
   if (isNaN(scheduledStart.getTime())) {
     return { status: "LIVE", message: "Assessment is active" };
   }
 
   let scheduledEnd;
-  if (quiz.endTime && quiz.endTime.includes(":")) {
-    const endParts = quiz.endTime.trim().split(":").map(Number);
-    scheduledEnd = new Date(year, month, day, endParts[0], endParts[1], 0);
+  const endNorm = normalizeTimeString(quiz.endTime);
+  if (endNorm && endNorm.includes(":")) {
+    const [eHours, eMins] = endNorm.split(":").map(Number);
+    scheduledEnd = new Date(year, month, day, eHours, eMins, 0);
   } else {
     const durationMs = (quiz.durationMinutes || 10) * 60 * 1000;
     // Grace window of 45 mins if no end time specified
